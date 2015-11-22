@@ -155,9 +155,7 @@
         //if(Office.select("bindings#id);)
         Office.context.document.bindings.addFromNamedItemAsync("Table1", "table", { id: 'myTable' }, function (result) {
             if (result.status == 'succeeded') {
-                app.showNotification('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-
-
+                app.showNotification(' ' + result.value.type + ' and id: ' + result.value.id);
             }
             else
                 app.showNotification('Error: ' + result.error.message);
