@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Created:cbbc9d22-5cf7-4e4c-8ee9-42a772aae58a-->
+<OfficeApp xsi:type="TaskPaneApp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/office/appforoffice/1.0">
+  <Id>de167ee3-197f-4191-8ced-5f2a2040bb9c</Id>
+  <Version>1.0.0.2</Version>
+  <ProviderName>China SDC</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="SPSync" />
+  <Description DefaultValue="SPSync" />
+  <Capabilities>
+    <Capability Name="Workbook" />
+    <Capability Name="Project" />
+    <Capability Name="Document" />
+    <Capability Name="Presentation" />
+  </Capabilities>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="~remoteAppUrl/App/Home/Home.html" />
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+</OfficeApp>
