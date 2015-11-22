@@ -11,12 +11,21 @@
 			
 			 $('.get-data-from-sp').click(getDataFromSPOnline);
 			 $('.load-data').click(getDataFromSPOnline);
-			 $('.read-data').click(getDataFromSelection);
-
+			 //$('.read-data').click(getDataFromSelection);
+			 $('.read-data').click(updateAllData);
 			 $('.post-selected-data').click(postSelectedData);
 			 $('.post-all-data').click(postAllData);
         });
-        app.showNotification(reason);
+        //app.showNotification(reason);
+
+        Office.context.document.bindings.addFromNamedItemAsync("Table1", "table", { id: 'myTable' }, function (result) {
+            if (result.status == 'succeeded') {
+                app.showNotification('Table Loaded and binded.');
+            }
+            else
+                app.showNotification('Error: ' + result.error.message);
+        });
+
     };
 
     function postSelectedData() {
@@ -71,6 +80,7 @@
 
     var rowLength = 0;
     function postAllData() {
+        app.showNotification("Submitting...");
         Excel.run(function (ctx) {
             var tablerows = ctx.workbook.tables.getItem('Table1').rows;
             tablerows.load('items');
@@ -117,22 +127,24 @@
         $(data).each(function () {
             //"ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", 
             //"Customer Profile", "Owner", "CurrentStep", "WFStatus", "LastStepDate", "PaidDate"
-            pData.push({
-                "ID": this[0],
-                "Customer": this[1],
-                "CustomerPhone": this[2],
-                "InvoiceNumber": this[3],
-                "InvoiceDate": convertStringDate(this[4]),
-                "DueDate": convertStringDate(this[5]),
-                "Amount": this[6],
-                "PaymentTerms": this[7],
-                "CustomerProfile": this[8],
-                "Owner": this[9],
-                "CurrentStep": this[10],
-                "WFStatus": this[11],
-                "LastStepDate": convertStringDate(this[12]),
-                "PaidDate": convertStringDate(this[13])
-            });
+            if (this[3]) {
+                pData.push({
+                    "ID": this[0],
+                    "Customer": this[1],
+                    "CustomerPhone": this[2],
+                    "InvoiceNumber": this[3],
+                    "InvoiceDate": convertStringDate(this[4]),
+                    "DueDate": convertStringDate(this[5]),
+                    "Amount": this[6],
+                    "PaymentTerms": this[7],
+                    "CustomerProfile": this[8],
+                    //"Owner": this[9],
+                    //"CurrentStep": this[10],
+                    //"WFStatus": this[11],
+                    //"LastStepDate": convertStringDate(this[12]),
+                    "PaidDate": convertStringDate(this[9])
+                });
+            }
         });
 
         $.ajax({
@@ -152,14 +164,48 @@
     }
 
     function updateAllData() {
-        //if(Office.select("bindings#id);)
-        Office.context.document.bindings.addFromNamedItemAsync("Table1", "table", { id: 'myTable' }, function (result) {
-            if (result.status == 'succeeded') {
-                app.showNotification(' ' + result.value.type + ' and id: ' + result.value.id);
-            }
-            else
-                app.showNotification('Error: ' + result.error.message);
+        app.showNotification("Loading...");
+        Office.context.document.bindings.getByIdAsync("myTable", function (asyncResult) {
+            var myTableBinding = asyncResult.value;
+            $.ajax({ url: "/PwCO365SPsync/api/SPData", type: "GET", headers: { "accept": "application/json;odata=verbose" } })
+                .done(function (newData) {
+                    var originalLength = myTableBinding.rowCount;
+                    var tableData = new Office.TableData();
+                    tableData.headers = ["ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", "Customer Profile", "PaidDate"];
+                    var originRows = [], newRows=[];
+                    $.each(newData, function (index, item) {
+                        if(index<originalLength)
+                            originRows.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber, convertDateString(item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate)]);
+                        else
+                            newRows.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber,
+                                (item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate)]);
+                    });
+                    while (originRows.length < originalLength) {
+                        originRows.push(['','','','','','','','','','']);
+                    }
+                    tableData.rows = originRows;
+
+                    myTableBinding.setDataAsync(tableData, function (asyncResult) {
+                        if (asyncResult.status == "failed") {
+                            app.showNotification("Action failed with error: " + asyncResult.error.message);
+                        } else {
+                            app.showNotification("Updated successfully!");
+                        }
+                    });
+                    if (newRows.length > 0) {
+                        myTableBinding.addRowsAsync(newRows, function (asyncResult) {
+                            if (asyncResult.status == "failed") {
+                                app.showNotification("Action failed with error: " + asyncResult.error.message);
+                            } else {
+                                app.showNotification("New rows added.");
+                            }
+                        });
+                    } 
+                }); 
         });
+    }
+    function onBindingNotFound() {
+        app.showNotification("Binding not found...");
     }
     // Reads data from current document selection and displays a notification
     function getDataFromSelection() {
@@ -259,7 +305,7 @@
 	function convertStringDate(serial) {
 	    if (serial != "") {
 	        var dateTemp = new Date('1/1/1900');
-	        dateTemp.setDate(dateTemp.getDate() + serial - 2);
+	        dateTemp.setDate(dateTemp.getDate() + serial);
 
 	        return dateTemp.toLocaleDateString();
 	    }

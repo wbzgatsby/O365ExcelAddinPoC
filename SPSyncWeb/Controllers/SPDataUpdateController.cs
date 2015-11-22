@@ -67,11 +67,13 @@ namespace SPSyncWeb.Controllers
             //    item["Owner"] = owner;
             //}
 
-            item["CurrentStep"] = invoice.CurrentStep;
-            item["WFStatus"] = invoice.WFStatus;
-            item["LastStepDate"] = invoice.LastStepDate;
+            //item["CurrentStep"] = invoice.CurrentStep;
+            //item["WFStatus"] = invoice.WFStatus;
+            //item["LastStepDate"] = invoice.LastStepDate;
             item["PaidDate"] = invoice.PaidDate;
-
+            if (invoice.PaidDate.HasValue) {
+                item["WFStatus"] = "Paid";
+            }
             item.Update();
         }
     }
