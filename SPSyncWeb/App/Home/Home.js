@@ -32,42 +32,6 @@
         Office.context.document.getSelectedDataAsync(Office.CoercionType.Table,
 			function (result) {
 			    if (result.status === Office.AsyncResultStatus.Succeeded) {
-			        //var pData = [];
-			        //$(result.value.rows).each(function () {
-			        //    //"ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", 
-			        //    //"Customer Profile", "Owner", "CurrentStep", "WFStatus", "LastStepDate", "PaidDate"
-			        //    pData.push({
-			        //        "ID": this[0],
-			        //        "Customer": this[1],
-			        //        "CustomerPhone": this[2],
-			        //        "InvoiceNumber": this[3],
-			        //        "InvoiceDate": this[4],
-			        //        "DueDate": this[5],
-			        //        "Amount": this[6],
-			        //        "PaymentTerms": this[7],
-			        //        "CustomerProfile": this[8],
-			        //        "Owner": this[9],
-			        //        "CurrentStep": this[10],
-			        //        "WFStatus": this[11],
-			        //        "LastStepDate": this[12],
-			        //        "PaidDate": this[13]
-			        //    });
-			        //});
-
-			        //$.ajax({
-			        //    url: "/PwCO365SPsync/API/SPDataUpdate",
-			        //    type: "POST",
-			        //    dataType: "json",
-			        //    data: JSON.stringify(pData),
-			        //    contentType: "application/json;odata=verbose",
-			        //    success: function (data) {
-			        //        console.log(data);
-			        //        app.showNotification("Update data successful...");
-			        //    },
-			        //    error: function (error) {
-			        //        console.log(JSON.stringify(error));
-			        //    }
-			        //});
 			        postData(result.value.rows);
 			    } else {
 			        app.showNotification('Error:', result.error.message);
@@ -120,6 +84,8 @@
                 console.log("Debug info: " + JSON.stringify(error.debugInfo));
             }
         });
+
+        rowLength = 0;
     }
 
     function postData(data) {
@@ -127,7 +93,7 @@
         $(data).each(function () {
             //"ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", 
             //"Customer Profile", "Owner", "CurrentStep", "WFStatus", "LastStepDate", "PaidDate"
-            if (this[3]) {
+            if (this[3] && this[10] == "1") {
                 pData.push({
                     "ID": this[0],
                     "Customer": this[1],
@@ -148,7 +114,7 @@
         });
 
         $.ajax({
-            url: "/PwCO365SPsync/API/SPDataUpdate",
+            url: SPServices.UpdateDataService,
             type: "POST",
             dataType: "json",
             data: JSON.stringify(pData),
@@ -167,41 +133,94 @@
         app.showNotification("Loading...");
         Office.context.document.bindings.getByIdAsync("myTable", function (asyncResult) {
             var myTableBinding = asyncResult.value;
-            $.ajax({ url: "/PwCO365SPsync/api/SPData", type: "GET", headers: { "accept": "application/json;odata=verbose" } })
-                .done(function (newData) {
+            $.ajax({
+                url: SPServices.getDataService,
+                type: "GET",
+                headers: { "accept": "application/json;odata=verbose" },
+                success: function (newData) {
                     var originalLength = myTableBinding.rowCount;
                     var tableData = new Office.TableData();
-                    tableData.headers = ["ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", "Customer Profile", "PaidDate"];
-                    var originRows = [], newRows=[];
+                    tableData.headers = ["ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", "Customer Profile", "PaidDate", "NeedUpdate"];
+                    var originRows = [], newRows = [];
                     $.each(newData, function (index, item) {
-                        if(index<originalLength)
-                            originRows.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber, convertDateString(item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate)]);
+                        if (index < originalLength)
+                            originRows.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber, convertDateString(item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate), "0"]);
                         else
                             newRows.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber,
-                                (item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate)]);
+                                (item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate), "0"]);
                     });
                     while (originRows.length < originalLength) {
-                        originRows.push(['','','','','','','','','','']);
+                        originRows.push(['', '', '', '', '', '', '', '', '', '', "0"]);
                     }
                     tableData.rows = originRows;
 
-                    myTableBinding.setDataAsync(tableData, function (asyncResult) {
-                        if (asyncResult.status == "failed") {
-                            app.showNotification("Action failed with error: " + asyncResult.error.message);
-                        } else {
-                            app.showNotification("Updated successfully!");
-                        }
-                    });
-                    if (newRows.length > 0) {
-                        myTableBinding.addRowsAsync(newRows, function (asyncResult) {
+                    $.when(
+                        myTableBinding.setDataAsync(tableData, function (asyncResult) {
                             if (asyncResult.status == "failed") {
                                 app.showNotification("Action failed with error: " + asyncResult.error.message);
                             } else {
-                                app.showNotification("New rows added.");
+                                app.showNotification("Updated successfully!");
                             }
-                        });
-                    } 
-                }); 
+                        })
+                    ).done(function () {
+                        if (newRows.length > 0) {
+                            myTableBinding.addRowsAsync(newRows, function (asyncResult) {
+                                if (asyncResult.status == "failed") {
+                                    app.showNotification("Action failed with error: " + asyncResult.error.message);
+                                } else {
+                                    app.showNotification("New rows added.");
+                                }
+                            });
+                        }
+                    });
+                    //if (newRows.length > 0) {
+                    //    myTableBinding.addRowsAsync(newRows, function (asyncResult) {
+                    //        if (asyncResult.status == "failed") {
+                    //            app.showNotification("Action failed with error: " + asyncResult.error.message);
+                    //        } else {
+                    //            app.showNotification("New rows added.");
+                    //        }
+                    //    });
+                    //}
+                },
+                error: function (error) {
+                    console.log(JSON.stringify(error));
+                }
+            })
+                //.done(function (newData) {
+                //    var originalLength = myTableBinding.rowCount;
+                //    var tableData = new Office.TableData();
+                //    tableData.headers = ["ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", "Customer Profile", "PaidDate"];
+                //    var originRows = [], newRows=[];
+                //    $.each(newData, function (index, item) {
+                //        if(index<originalLength)
+                //            originRows.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber, convertDateString(item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate)]);
+                //        else
+                //            newRows.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber,
+                //                (item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate)]);
+                //    });
+                //    while (originRows.length < originalLength) {
+                //        originRows.push(['','','','','','','','','','']);
+                //    }
+                //    tableData.rows = originRows;
+
+                //    myTableBinding.setDataAsync(tableData, function (asyncResult) {
+                //        if (asyncResult.status == "failed") {
+                //            app.showNotification("Action failed with error: " + asyncResult.error.message);
+                //        } else {
+                //            app.showNotification("Updated successfully!");
+                //        }
+                //    });
+                //    if (newRows.length > 0) {
+                //        myTableBinding.addRowsAsync(newRows, function (asyncResult) {
+                //            if (asyncResult.status == "failed") {
+                //                app.showNotification("Action failed with error: " + asyncResult.error.message);
+                //            } else {
+                //                app.showNotification("New rows added.");
+                //            }
+                //        });
+                //    } 
+                //}); 
         });
     }
     function onBindingNotFound() {
@@ -221,16 +240,16 @@
 		);
     }
     
-	function getDataFromSPOnline(data) {
+	function getDataFromSPOnline() {
 	    $.ajax({
-	        url: "/PwCO365SPsync/api/SPData",
+	        url: SPServices.getDataService,
 	        type: "GET",
 	        headers: {
 	            "accept": "application/json;odata=verbose"
 	        },
 	        success: function (data) {
-	            var titles = JSON.stringify(data);
-	            $('.data-show').val(titles)
+	            //var titles = JSON.stringify(data);
+	            //$('.data-show').val(titles)
 
 	            loadData(data);
 	        },
@@ -239,30 +258,6 @@
 	        }
 	    });
 	}
-
-	function getDataFromSPOnlineLocal(data) {
-	    $.ajax({
-	        url: "/api/SPData",
-	        type: "GET",
-	        headers: {
-	            "accept": "application/json;odata=verbose"
-	        },
-	        success: function (data) {
-	            var titles = JSON.stringify(data);
-	            $('.data-show').val(titles)
-
-	            loadData(data);
-	        },
-	        error: function (error) {
-	            app.showNotification(JSON.stringify(error));
-	        }
-	    });
-	}
-
-	//$(document).ready(function () {
-	//    $('.get-data-from-sp').click(getDataFromSPOnlineLocal);
-	//    $('.load-data').click(getDataFromSPOnlineLocal);
-	//});
 
 	function loadData(jsonData) {
 	    /* Select an empty cell and click Run Code to write a table */
@@ -270,11 +265,11 @@
 	    var myTable = new Office.TableData();
 	    //myTable.headers = ["ID", "Title", "InvNo", "ClientName", "Amount", "DueDate", "Status", "WorkflowType", "DSOBase", "DSORec", "Owner"];
 	    //myTable.headers = ["ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", "Customer Profile", "Owner", "CurrentStep", "WFStatus", "LastStepDate", "PaidDate"];
-	    myTable.headers = ["ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", "Customer Profile", "PaidDate"];
+	    myTable.headers = ["ID", "Customer", "CustomerPhone", "Invoice #", "Invoice date", "Due Date", "Amount", "Payment Terms", "Customer Profile", "PaidDate", "NeedUpdate"];
 	    var results = [];
 	    $.each(jsonData, function (index, item) {
 	        //results.push([item.ID, item.Title,item.InvNo,item.ClientName,item.Amount,item.DueDate,item.Status,item.WorkflowType,item.DSOBase,item.DSORec,item.Owner]);
-	        results.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber, convertDateString(item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate)]);
+	        results.push([item.ID, item.Customer, item.CustomerPhone, item.InvoiceNumber, convertDateString(item.InvoiceDate), convertDateString(item.DueDate), item.Amount, item.PaymentTerms, item.CustomerProfile, convertDateString(item.PaidDate), "0"]);
 	    });
 	    myTable.rows = results;
 
