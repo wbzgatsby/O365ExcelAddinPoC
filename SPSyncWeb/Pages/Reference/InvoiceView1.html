@@ -1,0 +1,2636 @@
+﻿<link rel="stylesheet" href="/sites/mktdemodev/SiteAssets/CSS/new-swiper-css/swiper.css" />
+<link rel="stylesheet" href="/sites/mktdemodev/SiteAssets/CSS/ptp.css" />
+<link rel="stylesheet" href="/sites/mktdemodev/SitePages/Invoice/build/styles.css" />
+<script type='text/javascript' src='/sites/mktdemodev/SitePages/Invoice/build/path.js'></script>
+<script type="text/javascript" src="/sites/mktdemodev/SiteAssets/Scripts/new-swiper-js/swiper.js"></script>
+<script type="text/javascript" src="/sites/mktdemodev/SiteAssets/Scripts/spin.js"></script>
+
+<style>
+    /* Demo Styles */
+    body {
+        width: 100%;
+    }
+
+    .tabs {
+        margin-left: 420px;
+        display: inline-block;
+    }
+
+        .tabs a {
+            display: block;
+            float: left;
+            color: #808080;
+            text-align: center;
+            line-height: 40px;
+            font-size: 22px;
+            text-decoration: none;
+            margin-right: 50px;
+        }
+
+            .tabs a.active {
+                color: #FF4701;
+                font-weight: bold;
+                font-size: 36px;
+            }
+
+    .swiper-container {
+        width: 100%;
+        height: 550px;
+        border-top: 0;
+        margin: 0px 0px 0px 0px;
+    }
+
+    .swiper-slide {
+        width: 140px;
+        background: none;
+        color: #fff;
+    }
+
+    .swiper-container-h {
+        /*background: #eee;*/
+    }
+
+        .swiper-container-h .swiper-slide {
+            height: auto;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 30px;
+            width: 130%;
+        }
+
+    .content-slide {
+        padding: 10px;
+    }
+
+    .leftPanel {
+        background: rgba(255, 71, 1,0.85);
+        width: 315px;
+        height: 600px;
+        left: 20px;
+        top: 0;
+        z-index: 999;
+        position: absolute;
+        box-shadow: 0 0 8px;
+    }
+
+    .invoiceInfoPanel {
+        margin-left: 30px;
+        color: white;
+        height: 240px;
+    }
+
+    .invoiceDetailDiv {
+        clear: both;
+        height: 30%;
+        padding-bottom: 75px;
+    }
+
+    .invoiceClientDiv {
+        margin: 20px 20px 15px 0px;
+    }
+
+    .invClientName {
+        font-size: 48px;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .invDetailLine {
+        float: left;
+        clear: both;
+        margin-bottom: 12px;
+    }
+
+        .invDetailLine .lineheader {
+            font-size: 11px;
+        }
+
+        .invDetailLine .linecontent {
+            font-size: 24px;
+            margin-top: -5px;
+        }
+
+    .dueDatePanel {
+        position: absolute;
+        left: 210px;
+        top: 80px;
+        background: #F1C40F;
+        width: 120px;
+        height: 80px;
+        box-shadow: 1px 1px 1px #888888;
+        text-align: center;
+    }
+
+        .dueDatePanel:after {
+            content: '';
+            position: absolute;
+            top: 81px;
+            right: 0px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 15px 0 0;
+            border-color: #888888 transparent transparent transparent;
+        }
+
+    .dueDateText {
+        font-size: 42px;
+        font-weight: bold;
+    }
+
+    .actionInfoDiv {
+        height: 110px;
+        background-color: #ff7e4e;
+        box-shadow: inset 5px 0px 30px -5px #888888;
+        color: white;
+    }
+
+        .actionInfoDiv .banner {
+            width: 15px;
+            height: 110px;
+            background-color: #F1C40F;
+            position: absolute;
+        }
+
+        .actionInfoDiv .actionInfoContent {
+            margin: 18px 0 0 15px;
+            float: left;
+        }
+
+            .actionInfoDiv .actionInfoContent .actionDueDate {
+                width: 80px;
+                text-align: center;
+                height: 65px;
+                border-right: 1px dotted white;
+                float: left;
+            }
+
+                .actionInfoDiv .actionInfoContent .actionDueDate .dueNumber {
+                    font-size: 32px;
+                    font-weight: bold;
+                }
+
+            .actionInfoDiv .actionInfoContent .actionOwner {
+                float: left;
+                text-align: left;
+                font-size: 16px;
+                width: 190px;
+                margin-top: -9px;
+            }
+
+                .actionInfoDiv .actionInfoContent .actionOwner div {
+                    clear: both;
+                    padding: 5px 0 0 15px;
+                }
+
+                .actionInfoDiv .actionInfoContent .actionOwner .actionInfoTitle, .actionInfoDiv .actionInfoContent .actionOwner .actionName {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+    .insightTitle {
+        font-size: 24px;
+        color: white;
+        padding: 10px 30px 0;
+    }
+
+    .insightContent {
+        box-shadow: inset 5px 0px 30px -5px #888888;
+        height: 160px;
+        margin: 5px 10px;
+        padding: 10px 20px 0;
+        background-color: #ff7e4e;
+        color: white;
+    }
+
+    .floatLeft {
+        float: left;
+    }
+
+    .greyWord {
+        font-size: large;
+        color: gray;
+    }
+</style>
+<div style="position:relative">
+    <div class="leftPanel OpenSansLight ">
+        <div id="InvoiceDetail" class="invoiceInfoPanel">
+            <div class="invoiceClientDiv">
+                <div class="invClientName" data-bind="text:clientName"></div>
+            </div>
+            <div class="invoiceDetailDiv">
+                <div class="invDetailLine">
+                    <div class="lineheader">Profile:</div><div class="linecontent" data-bind="text:level"></div>
+                </div>
+                <div class="invDetailLine">
+                    <div class="lineheader">Amount:</div><div class="linecontent">$<span data-bind="text:amount"></span></div>
+                </div>
+                <div class="invDetailLine">
+                    <div class="lineheader">Invoice No :</div> <div id="invoiceNo_Div" class="linecontent" data-bind="text:invoiceNo"></div>
+                </div>
+                <div class="dueDatePanel">
+                    <div class="dueDateText" data-bind="text:overdueDays"></div><div class="linecontent">Days Overdue</div>
+                </div>
+            </div>
+        </div><!-- end InoviceInfo DIV -->
+
+
+        <div id="actionInfoDiv" class="actionInfoDiv">
+            <div class="banner"></div>
+            <div class="actionInfoContent">
+                <div class="actionDueDate" id="actionDueDate_Div"><div class="dueNumber" data-bind="text:latestActDay"></div><div>Days</div></div>
+                <div class="actionOwner">
+                    <div class="actionInfoTitle">Next Step</div>
+                    <div class="ownerName" data-bind="text:operator"></div>
+                    <div class="actionName" data-bind="text:description"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="insightTitle">Insights:</div>
+        <div class="insightContent">
+            <div class="">Insights</div>
+            <div class="">This invoice is 30% of A/R </div>
+            <div class="">Average time taken to recover</div>
+        </div>
+    </div>
+    <div id="wfGraph" style="left:0; top:0;">
+        <div style="white-space: nowrap; overflow: hidden; margin-top:20px;">
+            <div class="tabs OpenSansLight" style=" height:45px;" id="tabtitleslide">
+                <a href="#" class="active" style="display: inline" idx="0">60 Day Scenario</a>
+                <a href="#" style="display: inline" idx="1">30 Day Scenario</a>
+            </div>
+        </div>
+        <div id="TestPTPDIV" style=" display:none; height:auto;width:500px;background-color:yellow;margin-left:500px">
+            <div>
+                <p style="float:left">Amount</p>
+                <p style="float:left;margin-left:10px">Due Date</p>
+                <p style="float:left;margin-left: 10px">Percentage</p>
+            </div>
+            <div data-bind="foreach: allPTPArray" style="height: 220px; overflow: auto; padding: 10px 0 0 5px;">
+                <div>
+                    <p style="float:left" data-bind="text:amount"></p>
+                    <p style="float:left;margin-left:10px" data-bind="text:dueDate"></p>
+                    <p style="float:left;margin-left: 10px" data-bind="text:percentage"></p><p> %</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div id="swiperWF" class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div id="swiper60Day" class="swiper-container swiper-container-h">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide content-slide">
+                                <div id="Day60Slide" class="wfContainer content-slide adjust-height">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-scrollbar1"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div id="swiper30Day" class="swiper-container swiper-container-h">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide content-slide">
+                                <div id="Day30Slide" class="wfContainer content-slide adjust-height"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-scrollbar2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="customerProfileKPI" style="display:none;">
+    <div class="kpi_line">
+        <div class="kpi_element"><div class="kpi_title">Volume</div><div class="kpi_value" data-bind="text:Volume">MED</div><img data-bind="attr: { src: VolumeImg}" class="kpi_trend" /></img></div>
+        <div class="kpi_element"><div class="kpi_title">Avg Value</div><div class="kpi_value" data-bind="text:AvgValue">LOW</div><img data-bind="attr: { src: AvgValueImg}" class="kpi_trend" /></img></div>
+        <div class="kpi_element"><div class="kpi_title">History</div><div class="kpi_value" data-bind="text:History">HIGH</div><img data-bind="attr: { src: HistoryImg}" class="kpi_trend" /></img></div>
+        <div class="kpi_element"><div class="kpi_title">Payment</div><div class="kpi_value" data-bind="text:PaymentHistory">LOW</div><img data-bind="attr: { src: PaymentHistoryImg}" class="kpi_trend" /></img></div>
+    </div>
+    <div class="kpi_line">
+        <div class="kpi_element"><div class="kpi_title">Dispute</div><div class="kpi_value" data-bind="text:Dispute">LOW</div><img data-bind="attr: { src: DisputeImg}" class="kpi_trend" /></img></div>
+        <div class="kpi_element"><div class="kpi_title">Response</div><div class="kpi_value" data-bind="text:Response">MED</div><img data-bind="attr: { src: ResponseImg}" class="kpi_trend" /></img></div>
+        <div class="kpi_element"><div class="kpi_title">Reliability</div><div class="kpi_value" data-bind="text:Reliability">MED</div><img data-bind="attr: { src: ReliabilityImg}" class="kpi_trend" /></img></div>
+        <div class="kpi_element"><div class="kpi_title">Variability</div><div class="kpi_value" data-bind="text:Variability">LOW</div><img data-bind="attr: { src: VariabilityImg}" class="kpi_trend" /></img></div>
+    </div>
+</div>
+<div id="paymentPlanDialog" title="Payment Plan" style="display:none;">
+    <div class="dialog_subtitle"><div>Amount:</div><div class="amount_sum"></div><div>&nbsp;&nbsp;Outstanding:</div><div class="outstanding_sum"></div></div>
+    <div class="paymentplan_input_container">
+        <div class="paymentplan_input_wrapper open">
+            <div class="paymentplan_input_title">
+                <div class="payment_index">1</div><div>Amount:</div><div class="payment_percent">%</div><div>paid on</div><div class="payment_date"></div><div class="arrow"></div>
+            </div>
+            <div class="paymentplan_input_box">
+                <div class="paymentplan_input_line">
+                    <div class="inputlabel">Amount %: </div><div class="inputsign">%</div><div class="inputbox"><input class="payamount" size="15" type="text" /></input></div>
+                </div>
+                <div class="paymentplan_input_line">
+                    <div class="inputlabel">Paid date:</div><div class="inputsign"></div><div class="inputbox"><input class="paydate" size="15" type="text" /></input></div>
+                </div>
+            </div>
+        </div>
+        <div class="paymentplan_input_wrapper">
+            <div class="paymentplan_input_title">
+                <div class="payment_index">2</div><div>Amount:</div><div class="payment_percent">%</div><div>paid on</div><div class="payment_date"></div><div class="arrow"></div>
+            </div>
+            <div class="paymentplan_input_box">
+                <div class="paymentplan_input_line">
+                    <div class="inputlabel">Amount %: </div><div class="inputsign">%</div><div class="inputbox"><input class="payamount" size="15" type="text" /></input></div>
+                </div>
+                <div class="paymentplan_input_line">
+                    <div class="inputlabel">Paid date:</div><div class="inputsign"></div><div class="inputbox"><input class="paydate" size="15" type="text" /></input></div>
+                </div>
+            </div>
+        </div>
+        <div class="paymentplan_input_wrapper hide">
+            <div class="paymentplan_input_title">
+                <div class="payment_index">3</div><div>Amount:</div><div class="payment_percent">%</div><div>paid on</div><div class="payment_date"></div><div class="arrow"></div>
+            </div>
+            <div class="paymentplan_input_box">
+                <div class="paymentplan_input_line">
+                    <div class="inputlabel">Amount %: </div><div class="inputsign">%</div><div class="inputbox"><input class="payamount" size="15" type="text" /></input></div>
+                </div>
+                <div class="paymentplan_input_line">
+                    <div class="inputlabel">Paid date:</div><div class="inputsign"></div><div class="inputbox"><input class="paydate" size="15" type="text" /></input></div>
+                </div>
+            </div>
+        </div>
+        <div class="paymentplan_input_wrapper hide">
+            <div class="paymentplan_input_title">
+                <div class="payment_index">4</div><div>Amount:</div><div class="payment_percent">%</div><div>paid on</div><div class="payment_date"></div><div class="arrow"></div>
+            </div>
+            <div class="paymentplan_input_box">
+                <div class="paymentplan_input_line">
+                    <div class="inputlabel">Amount %: </div><div class="inputsign">%</div><div class="inputbox"><input class="payamount" size="15" type="text" /></input></div>
+                </div>
+                <div class="paymentplan_input_line">
+                    <div class="inputlabel">Paid date:</div><div class="inputsign"></div><div class="inputbox"><input class="paydate" size="15" type="text" /></input></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="paymentplan_add">Add New Segment</div>
+    <div class="paymentplan_comment"><textarea placeholder="Add your comments here"></textarea></div>
+
+</div>
+<div id="loading"></div>
+<script>
+    var DEFAULT_INDEX = 2;
+    var ActionType = {
+        COMPLETE: 'Completed',
+        NOTSTARTED: 'Not Started',
+        INPROGRESS: 'In-Progress'
+    }
+
+    var Task_Type = {
+        APPROVAL: 'Approval',
+        CREATEMAIL: 'Create Letter',
+        MAIL: 'Send Letter',
+        CALL: 'Call Customer',
+        COMPLETE: 'Payment received'
+    }
+    var wfObject = { steps: [] };
+    var reducedAmt = 7000;
+    var pathUI60days = {};
+
+    var Day60queryString = "", Day30queryString = "";
+    var tempPicArrary = [];
+    var tempAllArray = [];
+    var commentFormat = " commented: "
+
+    var target = document.getElementById('loading');
+
+    var opts = {
+        lines: 10 // The number of lines to draw
+            , length: 0 // The length of each line
+            , width: 15 // The line thickness
+            , radius: 38 // The radius of the inner circle
+            , scale: 1.5 // Scales overall size of the spinner
+            , corners: 1 // Corner roundness (0..1)
+            , color: '#de7f05' // #rgb or #rrggbb or array of colors
+            , opacity: 0.25 // Opacity of the lines
+            , rotate: 22 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 1 // Rounds per second
+            , trail: 72 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '40%' // Top position relative to parent
+            , left: '50%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+            , position: 'absolute' // Element positioning
+    }
+    var isTask = {
+        Yes: 'Yes',
+        No: "No"
+    }
+
+    var DefaultComment = {
+        Approval: "Request approved",
+        CreateLetter: "Collection letter created",
+        Send: "Email sent to customer",
+        PTPApproval: "Payment plan approved",
+        PTP: "Payment plan created",
+        PaymentReceive: "Payment received"
+
+    }
+
+    var firststep_Owner;
+    var firststep_StartDate;
+
+    //**************End Init
+
+    function SetStepName(name) {
+        switch (name) {
+            case Task_Type.APPROVAL:
+                stepName = WF_STEP_NAME.APPROVAL;
+                break;
+            case Task_Type.CREATEMAIL:
+                stepName = WF_STEP_NAME.CREATEMAIL;
+                break;
+            case Task_Type.MAIL:
+                stepName = WF_STEP_NAME.MAIL;
+                break;
+            case Task_Type.CALL:
+                stepName = WF_STEP_NAME.CALL;
+                break;
+            case Task_Type.COMPLETE:
+                stepName = WF_STEP_NAME.COMPLETE;
+                break;
+            default:
+                stepName = "";
+                break;
+        }
+        return stepName;
+    }
+    function SetStepName2(name) {
+        switch (name) {
+            case WF_STEP_NAME.APPROVAL:
+                stepName = Task_Type.APPROVAL;
+                break;
+            case WF_STEP_NAME.CREATEMAIL:
+                stepName = Task_Type.CREATEMAIL;
+                break;
+            case WF_STEP_NAME.MAIL:
+                stepName = Task_Type.MAIL;
+                break;
+            case WF_STEP_NAME.CALL:
+                stepName = Task_Type.CALL;
+                break;
+            case WF_STEP_NAME.COMPLETE:
+                stepName = Task_Type.COMPLETE;
+                break;
+            default:
+                stepName = "";
+                break;
+        }
+        return stepName;
+    }
+
+    function SetStepStatue(status) {
+        var statusName;
+        switch (status) {
+            case ActionType.COMPLETE:
+                statusName = WF_STEP_STATUS.COMPLETE;
+                break;
+            case ActionType.INPROGRESS:
+                statusName = WF_STEP_STATUS.IN_PROGRESS;
+                break;
+            default:
+                statusName = WF_STEP_STATUS.NOTSTARTED;
+                break;
+        }
+
+        return statusName;
+    }
+    function setupWFSteps(wfObject, index, stepname, stepstatus, actionId, invoiceNumber, operatorname, recentActDate, description, preSeqId, comments, stepOwner, deviceId, workflowID) {
+        wfObject.steps[index] = {};
+        wfObject.steps[index].name = SetStepName(stepname);
+        wfObject.steps[index].status = SetStepStatue(stepstatus);
+        wfObject.steps[index].actionId = actionId;
+        wfObject.steps[index].invoiceNumber = invoiceNumber;
+        wfObject.steps[index].operatorname = operatorname;
+        wfObject.steps[index].recentActDate = recentActDate;
+        wfObject.steps[index].description = description;
+        wfObject.steps[index].nextStep = null;
+        wfObject.steps[index].comments = comments;
+        wfObject.steps[index].stepOwner = stepOwner;
+        wfObject.steps[index].deviceId = deviceId;
+        wfObject.steps[index].personImageClass = operatorname.split(' ').join('_');
+        wfObject.steps[index].workflowID = workflowID;
+        // add next step member
+        if (index !== 0) {
+            wfObject.steps[preSeqId - 1].nextStep = wfObject.steps[index];
+        }
+    }
+
+    function retrieveWFInfoAndDrawGraph(queryString, containerID) {
+        debugger;
+        wfObject = { steps: [] };
+        pathUI60days = {};
+
+        var clientContext = new SP.ClientContext.get_current();
+        var oWebsite;
+        var camlQuery;
+        var oList;
+        oWebsite = clientContext.get_web();
+        oList = oWebsite.get_lists().getByTitle('ActionHistory');
+        camlQuery = new SP.CamlQuery();
+        camlQuery.set_viewXml(queryString);
+        var oItemColl = oList.getItems(camlQuery);
+        clientContext.load(oItemColl);
+
+        clientContext.executeQueryAsync(function () {
+            var listItemEnumerator = oItemColl.getEnumerator();
+            var i = 0, currentWFid = 0, currentWFObj = {}, tempcomment = "";
+            while (listItemEnumerator.moveNext()) {
+                // debugger;
+                var oListItem = listItemEnumerator.get_current();
+                var actionSeqId = oListItem.get_item("ActionSeqID");
+                var workflowId = oListItem.get_item("WorkflowID");
+                var scenarioType = oListItem.get_item("NewColumn1");
+                var actionStatus = oListItem.get_item("ActionStatus");
+                var taskType = oListItem.get_item("tasktype");
+                var preSeqId = oListItem.get_item("PreSeqID");
+                var operator = oListItem.get_item("Operator");
+                var description = oListItem.get_item("Description");
+                var tempcomment = '';//oListItem.get_item("Comment");
+                var comment = (tempcomment == null || tempcomment.trim().length == 0) ? "" : tempcomment;
+                var id = oListItem.get_item("ID");
+                var invoiceNumber = (oListItem.get_item("Invoice_x0020_Number"));
+                var deviceId = oListItem.get_item("DeviceId");
+                deviceId = deviceId ? deviceId : "device5";
+
+                ///Get target Uer Info
+                debugger;
+                var stepOwner = {};
+                stepOwner.name = operator.get_lookupValue();
+                stepOwner.id = operator.get_lookupId();
+                stepOwner.email = operator.get_email();
+
+                //var operatorname = operator.get_lookupValue();
+                //var nextSeqID = oListItem.get_item("NextSeqID");
+
+                var tempdate = oListItem.get_item("Start_x0020_Date");
+                var startDate = (tempdate == null || tempdate.length == 0) ? getToday() : new Date(tempdate);
+                var recentActDate = startDate.dateDiff("d", getToday()) < 0 ? 0 : startDate.dateDiff("d", getToday());
+
+                if (currentWFid != workflowId) {
+                    if (currentWFid == 0) {
+                        currentWFObj = wfObject;
+                    }
+                    else {
+                        currentWFObj.steps[preSeqId - 1].subflow = {};
+                        currentWFObj.steps[preSeqId - 1].subflow.steps = [];
+                        currentWFObj = currentWFObj.steps[preSeqId - 1].subflow;
+                    }
+                    currentWFid = workflowId;
+                }
+
+                setupWFSteps(currentWFObj, actionSeqId - 1, taskType, actionStatus, id, invoiceNumber, stepOwner.name, recentActDate, description, preSeqId, comment, stepOwner, deviceId, currentWFid);
+                i++;
+            }
+            //var stepsLength = drawWF(containerID, wfObject);
+            debugger;
+            var params1 = {};
+            params1.workflow60days = wfObject;
+            params1.pregenerated = true;
+
+            $(containerID).html('');
+            $("#panels").remove();
+            pathUI60days = new PathUI(containerID, params1);
+            //$("#" + containerID).attr("StepLength", stepsLength);
+            //$("#" + containerID).width((stepsLength * 2 - 1) * ($(".wfStep").width()) * 2);
+
+        }, onFailed);
+    }
+
+
+
+    $(function () {
+        document.onclick = function () {
+            $('.gom_Cvt_Title_MQY_Select').hide();
+            $('.rev_Cvt_Title_MQY_Select').hide();
+            $('.exp_Cvt_Title_MQY_Select').hide();
+            $('.rcb_Cvt_Title_MQY_Select').hide();
+            $('.pay_Cvt_Title_MQY_Select').hide();
+            $('.inv_Cvt_Title_MQY_Select').hide();
+            $('.totalcash_Cvt_Title_MQY_Select').hide();
+            $('.payTre_Cvt_Title_MQY_Select').hide();
+            $('.paySpe_Cvt_Title_MQY_Select').hide();
+
+        };
+
+        $(".dueDatePanel").click(function () { $('.trigger-next').eq(0).click() });
+        $(".insightTitle").unbind('click').click(function () {
+            if ($(".Apply.Cash.In.Progress").length > 0) {
+                console.log("secret button1 for completed last step only")
+                var clientContext = new SP.ClientContext.get_current();
+                var oList = clientContext.get_web().get_lists().getByTitle('ActionHistory');
+                var camlQuery = new SP.CamlQuery();
+                camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><OrderBy><FieldRef Name='Modified' Ascending='FALSE'></FieldRef></OrderBy><Where><And><And><BeginsWith><FieldRef Name='Invoice_x0020_Number' ></FieldRef><Value Type='Text'>" + invid + "</Value></BeginsWith><IsNotNull><FieldRef Name='Invoice_x0020_Number'></FieldRef></IsNotNull></And><And><BeginsWith><FieldRef Name='tasktype'></FieldRef><Value Type='Text'>Payment received</Value></BeginsWith><IsNotNull><FieldRef Name='tasktype'></FieldRef></IsNotNull></And></And></Where></Query></View>");
+                collListItem = oList.getItems(camlQuery);
+                clientContext.load(collListItem);
+                clientContext.executeQueryAsync(function () {
+                    var listItemEnumerator = collListItem.getEnumerator();
+                    if (listItemEnumerator.moveNext()) {
+                        var oListItem = listItemEnumerator.get_current();
+                        oListItem.set_item('ActionStatus', ActionStatus.COMPLETE);
+                        oListItem.update();
+                        clientContext.executeQueryAsync(function () {
+                            alert('Last Step done');
+                            window.location = window.location;
+                        }, onFailed);
+
+                        //AddInitialAmount()
+
+                        // clientContext.executeQueryAsync(function () { AddInitialAmount() }, onFailed);
+                        // clientContext.executeQueryAsync(function () { ReduceAmountAndCompleted(invoiceInfoVM.invoiceNo()) }, onFailed);
+
+
+                    }
+                    else {
+                        alert("Action no find!");
+                    }
+                }, onFailed);
+            }
+        });
+
+        $("a:contains('Sync with Quickbooks')").unbind('click').click(function (e) {
+            e.preventDefault();
+            console.log("*****secret button2 for updating amount****")
+            debugger;
+            AddInitialAmount().done(function () {
+                return false;
+            }).fail(function () { alert("AddInitialAmount Error！"); });
+        });
+
+        $(".invClientName ").unbind("click").click(function () {
+            if (!$("#customerProfileKPI").dialog("instance")) {
+                $("#customerProfileKPI").dialog({
+                    dialogClass: 'noTitleStuff',
+                    width: 390,
+                    position: { my: "left top", at: "right-50 bottom+20", of: ".invClientName" },
+                    closeOnEscape: true,
+                    clickOutSide: true,
+                    show: { effect: "slide", direction: "left", duration: 400 },
+                    hide: { effect: "slide", direction: "left", duration: 400 }
+                });
+            } else {
+                if ($("#customerProfileKPI").dialog("isOpen")) {
+                    $("#customerProfileKPI").dialog("close");
+                } else {
+                    $("#customerProfileKPI").dialog("open");
+                }
+            }
+        });
+
+        QueryString = {
+            data: {},
+            Initial: function () {
+                var aPairs, aTemp;
+                var queryString = new String(window.location.search);
+                queryString = queryString.substr(1, queryString.length);
+                aPairs = queryString.split("&");
+                for (var i = 0; i < aPairs.length; i++) {
+                    aTemp = aPairs[i].split("=");
+                    this.data[aTemp[0]] = aTemp[1];
+                }
+            },
+            GetValue: function (key) {
+                return this.data[key];
+            }
+        }
+
+        QueryString.Initial();//get QueryString key value pairs
+        var invid = QueryString.GetValue("invoiceNumber"); // get invoice number in query string
+
+        Day60queryString = "<View>" +
+		"  <Query>" +
+		"    <OrderBy>" +
+		"      <FieldRef Name='WorkflowID' Ascending='TRUE'></FieldRef>" +
+		"      <FieldRef Name='ActionSeqID' Ascending='TRUE'></FieldRef>" +
+		"    </OrderBy>" +
+		"    <Where>" +
+		"      <And>" +
+		"        <Eq>" +
+		"          <FieldRef Name='Invoice_x0020_Number'/>" +
+		"          <Value Type='Text'>" + invid + "</Value>" +
+		"        </Eq>" +
+		"        <Eq>" +
+		"          <FieldRef Name='NewColumn1'/>" +
+		"          <Value Type='Text'>60</Value>" +
+		"        </Eq>" +
+		"      </And>" +
+		"    </Where>" +
+		"  </Query>" +
+		"</View>";
+
+        Day30queryString = "<View>" +
+            "  <Query>" +
+            "    <OrderBy>" +
+            "      <FieldRef Name='WorkflowID' Ascending='TRUE'></FieldRef>" +
+            "      <FieldRef Name='ActionSeqID' Ascending='TRUE'></FieldRef>" +
+            "    </OrderBy>" +
+            "    <Where>" +
+            "      <And>" +
+            "        <Eq>" +
+            "          <FieldRef Name='Invoice_x0020_Number'/>" +
+            "          <Value Type='Text'>" + invid + "</Value>" +
+            "        </Eq>" +
+            "        <Eq>" +
+            "          <FieldRef Name='NewColumn1'/>" +
+            "          <Value Type='Text'>30</Value>" +
+            "        </Eq>" +
+            "      </And>" +
+            "    </Where>" +
+            "  </Query>" +
+            "</View>";
+
+        var _viewModel = {
+            mainNavigation: ["Cash Overview", "Targets", "Gross Margin", "Revenue", "Expenses", "Recevables", "Payables", "Inventory"]
+        }
+        initCurUser();
+        retrieveWFInfoAndDrawGraph(Day60queryString, "#Day60Slide");
+        //retrieveWFInfoAndDrawGraph(Day30queryString, "Day30Slide");
+
+        //click outside to hide popup
+
+        //tab
+        $(".tabs a").on('touchstart mousedown', function (e) {
+            e.preventDefault();
+            $(".tabs .active").removeClass('active');
+            $(this).addClass('active');
+            var idx = $(this).index();
+            swiperH.slideTo(idx, 800);
+        });
+
+        $(".tabs a").click(function (e) {
+            e.preventDefault();
+        });
+        // swiper
+        //        var day30length =
+        var swiperH = new Swiper('#swiperWF', {
+            pagination: '.swiper-pagination-h',
+            paginationClickable: true,
+            spaceBetween: 50,
+            noSwipingClass: 'popup',
+            onTouchStart: function (swiper, event) {
+                swiper.detachEvents();
+            },
+            onSlideChangeEnd: function (swiper) {
+                if (swiper.activeIndex == 0) {
+                    swiperH1.attachEvents();
+                    swiperH2.detachEvents();
+                } else if (swiper.activeIndex == 1) {
+                    swiperH2.attachEvents();
+                    swiperH1.detachEvents();
+                }
+            },
+            onSlideChangeStart: function (swiper) {
+                $("#tabtitleslide .active").removeClass('active');
+                $("#tabtitleslide a").eq(swiper.activeIndex).addClass('active');
+
+            },
+            onTap: OnTapSwiper,
+            onClick: OnClickSwiper
+        });
+        var swiperH1 = new Swiper('#swiper60Day', {
+            scrollbar: '.swiper-scrollbar1',
+            direction: 'horizontal',
+            slidesPerView: 'auto',
+            mousewheelControl: true,
+            freeMode: true,
+            noSwipingClass: 'popup',
+            onTouchEnd: function (swiper, event) {
+                if (swiper.isEnd && swiper.touches.diff < -400) {
+                    swiper.touches.diff = 0;
+                    swiperH.slideNext(true, 800);
+                }
+            },
+            onTap: OnTapSwiper,
+            onClick: OnClickSwiper
+        });
+
+        var swiperH2 = new Swiper('#swiper30Day', {
+            scrollbar: '.swiper-scrollbar2',
+            direction: 'horizontal',
+            slidesPerView: 'auto',
+            mousewheelControl: true,
+            freeMode: true,
+            noSwipingClass: 'popup',
+            onTouchEnd: function (swiper, event) {
+                if (swiper.isBeginning && swiper.touches.diff > 400) {
+                    swiper.touches.diff = 0;
+                    swiperH.slidePrev(true, 800);
+                }
+            },
+            onTap: OnTapSwiper,
+            onClick: OnClickSwiper
+
+        });
+
+        retrieveInvoiceInfo(invid);
+        retrieveActionInfo(invid);
+        //retrieveCustomerInfo(invid);
+        ko.applyBindings(invoiceInfoVM, $("#InvoiceDetail")[0]);
+        ko.applyBindings(customerKPIVM, $("#customerProfileKPI")[0]);
+
+    });
+
+
+    function OnTapSwiper(swiper, event) {
+        /*debugger;
+        if ($(event.target).parents(".step").hasClass("current") && !pathUI60days.showingPanels) {
+        	pathUI60days._renderPanel();
+        }else{
+        	pathUI60days._removePanel();
+        }*/
+    }
+    function OnClickSwiper(swiper, event) {
+    }
+
+    //load Left Panel
+
+
+    var oListItem;
+    var invoiceInfoVM = {
+        invoiceNo: ko.observable(),
+        clientName: ko.observable(),
+        amount: ko.observable(),
+        overdueDays: ko.observable(),
+        invoiceDate: ko.observable(),
+        dueDate: ko.observable(),
+        level: ko.observable()
+    };
+    var ActionInfoVM = {
+        invoiceNo: ko.observable(),
+        operator: ko.observable(),
+        workflowID: ko.observable(),
+        description: ko.observable(),
+        comment: ko.observable(),
+        modifyDate: ko.observable(),
+        latestActDay: ko.observable()
+    };
+    //New******Get Customer List Info in Left Panel
+    var customerInfoVM = {
+
+        ClientName: ko.observable(),
+        PhoneNo: ko.observable(),
+        Address: ko.observable(),
+        Industry: ko.observable(),
+        ClientID: ko.observable(),
+        ClientDescription: ko.observable(),
+        Status: ko.observable(),
+        RelatedInvoiceNo: ko.observable()
+    };
+
+
+    function CustomerKPIVM() {
+        this.ClientName = ko.observable();
+        this.Volume = ko.observable();
+        this.VolumeTrend = ko.observable();
+        this.VolumeImg = ko.pureComputed(function () {
+            return "/sites/mktdemodev/SitePages/Invoice/app/images/" + this.Volume() + "_" + this.VolumeTrend() + ".png";
+        }, this);
+        this.AvgValue = ko.observable();
+        this.AvgValueTrend = ko.observable();
+        this.AvgValueImg = ko.pureComputed(function () {
+            return "/sites/mktdemodev/SitePages/Invoice/app/images/" + this.AvgValue() + "_" + this.AvgValueTrend() + ".png";
+        }, this);
+        this.History = ko.observable();
+        this.HistoryTrend = ko.observable();
+        this.HistoryImg = ko.pureComputed(function () {
+            return "/sites/mktdemodev/SitePages/Invoice/app/images/" + this.History() + "_" + this.HistoryTrend() + ".png";
+        }, this);
+        this.PaymentHistory = ko.observable();
+        this.PaymentHistoryTrend = ko.observable();
+        this.PaymentHistoryImg = ko.pureComputed(function () {
+            return "/sites/mktdemodev/SitePages/Invoice/app/images/" + this.PaymentHistory() + "_" + this.PaymentHistoryTrend() + ".png";
+        }, this);
+        this.Dispute = ko.observable();
+        this.DisputeTrend = ko.observable();
+        this.DisputeImg = ko.pureComputed(function () {
+            if (this.Dispute() == "HIGH")
+                return "/sites/mktdemodev/SitePages/Invoice/app/images/LOW_" + this.DisputeTrend() + ".png";
+            else if (this.Dispute() == "LOW")
+                return "/sites/mktdemodev/SitePages/Invoice/app/images/HIGH_" + this.DisputeTrend() + ".png";
+            else
+                return "/sites/mktdemodev/SitePages/Invoice/app/images/" + this.Dispute() + "_" + this.DisputeTrend() + ".png";
+        }, this);
+        this.Response = ko.observable();
+        this.ResponseTrend = ko.observable();
+        this.ResponseImg = ko.pureComputed(function () {
+            return "/sites/mktdemodev/SitePages/Invoice/app/images/" + this.Response() + "_" + this.ResponseTrend() + ".png";
+        }, this);
+        this.Reliability = ko.observable();
+        this.RelTrend = ko.observable();
+        this.ReliabilityImg = ko.pureComputed(function () {
+            return "/sites/mktdemodev/SitePages/Invoice/app/images/" + this.Reliability() + "_" + this.RelTrend() + ".png";
+        }, this);
+        this.Variability = ko.observable();
+        this.VarTrend = ko.observable();
+        this.VariabilityImg = ko.pureComputed(function () {
+            if (this.Variability() == "HIGH")
+                return "/sites/mktdemodev/SitePages/Invoice/app/images/LOW_" + this.VarTrend() + ".png";
+            else if (this.Variability() == "LOW")
+                return "/sites/mktdemodev/SitePages/Invoice/app/images/HIGH_" + this.VarTrend() + ".png";
+            else
+                return "/sites/mktdemodev/SitePages/Invoice/app/images/" + this.Variability() + "_" + this.VarTrend() + ".png";
+        }, this);
+    }
+    var customerKPIVM = new CustomerKPIVM();
+
+    Date.prototype.dateDiff = function (interval, objDate2) {
+        var d = this, i = {}, t = d.getTime(), t2 = objDate2.getTime();
+        i['y'] = objDate2.getFullYear() - d.getFullYear();
+        i['q'] = i['y'] * 4 + Math.floor(objDate2.getMonth() / 4) - Math.floor(d.getMonth() / 4);
+        i['m'] = i['y'] * 12 + objDate2.getMonth() - d.getMonth();
+        i['ms'] = objDate2.getTime() - d.getTime();
+        i['w'] = Math.floor((t2 + 345600000) / (604800000)) - Math.floor((t + 345600000) / (604800000));
+        i['d'] = Math.floor(t2 / 86400000) - Math.floor(t / 86400000);
+        i['h'] = Math.floor(t2 / 3600000) - Math.floor(t / 3600000);
+        i['n'] = Math.floor(t2 / 60000) - Math.floor(t / 60000);
+        i['s'] = Math.floor(t2 / 1000) - Math.floor(t / 1000);
+        return i[interval];
+    }
+
+    function retrieveInvoiceInfo(invid) {
+        debugger;
+        var clientContext = new SP.ClientContext.get_current();
+        var oWebsite;
+        var camlQuery;
+        var oList;
+        oWebsite = clientContext.get_web();
+        oList = oWebsite.get_lists().getByTitle('Invoice detail');
+        camlQuery = new SP.CamlQuery();
+
+        camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><Where><Eq><FieldRef Name='Invoice_x0020__x0023_'/><Value Type='Text'>" + invid + "</Value></Eq></Where></Query></View>");
+
+        var oItemColl = oList.getItems(camlQuery);
+        clientContext.load(oItemColl);
+
+        clientContext.executeQueryAsync(function () {
+            var listItemEnumerator = oItemColl.getEnumerator();
+            debugger;
+            while (listItemEnumerator.moveNext()) {
+                var oListItem = listItemEnumerator.get_current();
+                debugger;
+                var amount = oListItem.get_item("Amount");
+                //var invoiceId = oListItem.get_id();
+                var invoiceNo = invid;
+                var clientName = oListItem.get_item("Title");
+
+                var dueDate = oListItem.get_item("Due_x0020_Date").format('MM/dd/yyyy');
+
+                var overdueDays = oListItem.get_item("Due_x0020_Date").dateDiff("d", getToday());
+                overdueDays = (overdueDays < 0) ? "0" : overdueDays;
+
+                var tempdate = oListItem.get_item("Invoice_x0020_date");
+                var invoiceDate = (tempdate == null || tempdate.length == 0) ? "no data" : tempdate.format('MM/dd/yyyy');
+                var level = oListItem.get_item("Customer_x0020_Profile");
+
+
+
+                invoiceInfoVM.invoiceNo(invid);
+                invoiceInfoVM.clientName(clientName);
+                invoiceInfoVM.amount(amount);
+                invoiceInfoVM.overdueDays(overdueDays);
+                invoiceInfoVM.invoiceDate(invoiceDate);
+                invoiceInfoVM.dueDate(dueDate);
+                invoiceInfoVM.level(level);
+            }
+            retrieveCustomerKPI($.trim(clientName));
+        }, onFailed);
+
+    }
+
+
+    function updateCurrentActionInfo(step) {
+        ActionInfoVM.operator(step.operatorname);
+        ActionInfoVM.description(step.description);
+        ActionInfoVM.latestActDay(0);
+    }
+    function retrieveActionInfo(invid) {
+        var clientContext = new SP.ClientContext.get_current();
+        var oWebsite;
+        var camlQuery;
+        var oList;
+        oWebsite = clientContext.get_web();
+        oList = oWebsite.get_lists().getByTitle('ActionHistory');
+        camlQuery = new SP.CamlQuery();
+
+        camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><OrderBy><FieldRef Name='Modified' Ascending='FALSE'></FieldRef></OrderBy><Where><And><BeginsWith><FieldRef Name='Invoice_x0020_Number'></FieldRef><Value Type='Text'>" + invid + "</Value></BeginsWith><BeginsWith><FieldRef Name='ActionStatus'></FieldRef><Value Type='Text'>In-Progress</Value></BeginsWith></And></Where></Query></View>");
+
+        var oItemColl = oList.getItems(camlQuery);
+        clientContext.load(oItemColl);
+
+        ////
+        clientContext.executeQueryAsync(function () {
+            debugger;
+            var listItemEnumerator = oItemColl.getEnumerator();
+
+            while (listItemEnumerator.moveNext()) {
+                debugger;
+                var oListItem = listItemEnumerator.get_current();
+
+                //var invoiceId = oListItem.get_id();
+                var invoiceNo = invid;
+                debugger;
+                var operator = oListItem.get_item("Operator");
+                var description = oListItem.get_item("Description");
+                // var tempcomment = oListItem.get_item("Comment");
+                // var comment = (tempcomment == null || tempcomment.length == 0) ? "no comment" : tempcomment;
+                var tempdate = oListItem.get_item("Start_x0020_Date");
+                var startDate = (tempdate == null || tempdate.length == 0) ? "" : new Date(tempdate);
+                var workflowID = oListItem.get_item("WorkflowID");
+                var operatorName = operator.get_lookupValue();
+
+
+                ActionInfoVM.workflowID(workflowID);
+                ActionInfoVM.invoiceNo(invid);
+                ActionInfoVM.operator(operatorName);
+                ActionInfoVM.description(description);
+                // ActionInfoVM.comment(comment);
+                var recentActDate = 0;
+                if (startDate != "") {
+                    recentActDate = startDate.dateDiff("d", getToday()) < 0 ? 0 : (startDate.dateDiff("d", getToday()));
+                    recentActDate = (recentActDate < 0) ? "0" : recentActDate;
+                }
+
+                ActionInfoVM.latestActDay(recentActDate);
+            }
+            ko.applyBindings(ActionInfoVM, $("#actionInfoDiv")[0]);
+
+        }, onFailed);
+
+    }
+
+    //**********Update ActionHistory list
+
+    var ActionStatus = {
+        NOTSTARTED: 'Not Started',
+        INPROGRESS: 'In-Progress',
+        COMPLETE: 'Completed'
+    }
+    var ActionDescription = {
+        CREATED: 'Sales PM has created letter',
+        OWNAPP: 'Owner has approved this request. test data',
+        SENT: 'Letter has been sent',
+        CALL: 'Already called customer',
+        COMPLETED: 'All the things completed'
+    }
+    var alertMsg = {
+        CREATED: 'Created Successfully. Sales PM has created letter',
+        OWNAPP: 'Successfully. Owner has approved this request. test data',
+        SENT: 'Successfully. Letter has been sent'
+    }
+    var MSG = "";
+
+    var getToday = function () {
+        var localtoday = new Date();
+        return new Date(localtoday.getTime() + _spPageContextInfo.clientServerTimeDelta);
+    }
+
+    var WFStatus = {
+        NOTSTARTED: 'Not Started',
+        INPROGRESS: 'In Progress',
+        AWAITING: 'Awaiting Payment',
+        PAID: 'Paid'
+    }
+    var CurStep = {
+
+        NOSTEP: 'No Step',
+        APPROVAL: 'Approval',
+        CREATEDLETTER: 'Create Letter',
+        SENDLETTER: 'Send Letter',
+        CREATEDANDSEND: 'Create and Send Letter',
+        CALL: 'Call Customer',
+        COMPLETED: 'Payment Received'
+    }
+
+    var EmailSubject = {
+        'template3': 'BusinessOS Reminder - Create Collection Letter',
+        'template4': 'BusinessOS Reminder - Send Collection Letter',
+        'template5': 'BusinessOS Reminder - Call Customer',
+        'template6': 'BusinessOS Reminder - Approve Payment Plan',
+        'template7': 'BusinessOS Reminder - Create Collection Letter',
+        'template8': 'BusinessOS Reminder - Send Collection Letter',
+        'template9': 'BusinessOS Reminder - Contact Customer',
+        'template10': 'BusinessOS Reminder - Approve Payment Plan',
+        'template11': 'BusinessOS Reminder - Payment Plan Approved',
+    }
+
+    function UpdateActList(step) {
+        var dfd = $.Deferred(function () {
+            debugger;
+            taskType = SetStepName2(step.name);
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('ActionHistory');
+
+            var camlQuery = new SP.CamlQuery();
+            if (step.invoiceNumber == "") {
+                alert("No selected invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><OrderBy><FieldRef Name='Modified' Ascending='FALSE'></FieldRef></OrderBy><Where><And><And><BeginsWith><FieldRef Name='Invoice_x0020_Number' ></FieldRef><Value Type='Text'>" + step.invoiceNumber + "</Value></BeginsWith><IsNotNull><FieldRef Name='Invoice_x0020_Number'></FieldRef></IsNotNull></And><And><BeginsWith><FieldRef Name='ID'></FieldRef><Value Type='Text'>" + step.actionId + "</Value></BeginsWith><IsNotNull><FieldRef Name='ID'></FieldRef></IsNotNull></And></And></Where></Query></View>");
+            }
+            collListItem = oList.getItems(camlQuery);
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+                debugger;
+                var listItemEnumerator = collListItem.getEnumerator();
+                if (listItemEnumerator.moveNext()) {
+                    var oListItem = listItemEnumerator.get_current();
+
+                    oListItem.set_item('ActionStatus', ActionStatus.COMPLETE);
+
+                    oListItem.update();
+                    //Open Next
+                    debugger;
+                    if (step.nextStep) {
+                        OpenActionStep(step.nextStep);
+                    }
+
+                }
+                else {
+                    alert("Action no find!");
+                }
+
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+    };
+
+
+    function OpenActionStep(step) { //step.invoiceNumber, step.actionId
+        var dfd = $.Deferred(function () {
+            debugger;
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('ActionHistory');
+            var camlQuery = new SP.CamlQuery();
+            if (step.invoiceNumber == "") {
+                alert("No selected invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><OrderBy><FieldRef Name='Modified' Ascending='FALSE'></FieldRef></OrderBy><Where><And><And><BeginsWith><FieldRef Name='Invoice_x0020_Number' ></FieldRef><Value Type='Text'>" + step.invoiceNumber + "</Value></BeginsWith><IsNotNull><FieldRef Name='Invoice_x0020_Number'></FieldRef></IsNotNull></And><And><BeginsWith><FieldRef Name='ID'></FieldRef><Value Type='Text'>" + step.actionId + "</Value></BeginsWith><IsNotNull><FieldRef Name='ID'></FieldRef></IsNotNull></And></And></Where></Query></View>");
+            }
+            collListItem = oList.getItems(camlQuery);
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+                debugger;
+                var listItemEnumerator = collListItem.getEnumerator();
+                if (listItemEnumerator.moveNext()) {
+                    var oListItem = listItemEnumerator.get_current();
+                    var testing = oListItem.get_item('ActionStatus');
+                    oListItem.set_item('ActionStatus', ActionStatus.INPROGRESS);
+                    oListItem.set_item('Start_x0020_Date', getToday().toLocaleDateString());
+
+                    oListItem.update();
+
+                    clientContext.executeQueryAsync("", onFailed);
+                }
+                else {
+                    alert("Action no find!");
+                }
+
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+    }
+
+
+
+    //Update Expcetionloop Action(at Call step No.4)
+    function UpdateCall_ActList(step) {//invoiceNo, CurrentActID, SubActID, taskType, comment
+        var dfd = $.Deferred(function () {
+            debugger;
+            var taskType = SetStepName2(step.name);
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('ActionHistory');
+
+            var camlQuery = new SP.CamlQuery();
+            if (step.invoiceNumber == "") {
+                alert("No selected invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><OrderBy><FieldRef Name='Modified' Ascending='FALSE'></FieldRef></OrderBy><Where><And><And><BeginsWith><FieldRef Name='Invoice_x0020_Number' ></FieldRef><Value Type='Text'>" + step.invoiceNumber + "</Value></BeginsWith><IsNotNull><FieldRef Name='Invoice_x0020_Number'></FieldRef></IsNotNull></And><And><BeginsWith><FieldRef Name='ID'></FieldRef><Value Type='Text'>" + step.actionId + "</Value></BeginsWith><IsNotNull><FieldRef Name='ID'></FieldRef></IsNotNull></And></And></Where></Query></View>");
+            }
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+
+
+            clientContext.executeQueryAsync(function () {
+                // var listItemInfo = '';
+
+                var listItemEnumerator = collListItem.getEnumerator();
+                // alert("exeeeeeeee");
+                if (listItemEnumerator.moveNext()) {
+                    var oListItem = listItemEnumerator.get_current();
+
+                    oListItem.set_item('ActionStatus', ActionStatus.COMPLETE);
+                    //oListItem.set_item('Comment', step.comments);
+
+                    debugger;
+                    oListItem.update();
+                }
+                else {
+                    alert("Action no find!");
+                }
+
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+    };
+
+    function onUpdateCallSuccess(msg) {
+        alert(msg);
+    }
+
+
+    //Add to Email list
+
+    function requestEmail(templateID, mailaddress, payload) {
+        if (!payload || payload == "" || payload.length == 0) payload = "/{payload}~1";
+        else payload = "/" + payload;
+        var emailURL = "https://microsoft-apiapp29649575f62846b483ada01b21ca746c.azurewebsites.net:443/Email/Prod/RequestEmail/" + templateID + "/" + mailaddress + "/" + EmailSubject["template" + templateID] + payload;
+        $.ajax({
+            url: emailURL,
+            dataType: "jsonp",
+            success: function () {
+                console.log(emailURL);
+            }/*,
+            complete:function(){
+            	window.location = window.location;
+            }*/
+        });
+    }
+    function addEmail(to, subject, body, invoiceNo, actionID) {
+        try {
+            debugger;
+            var context = new SP.ClientContext.get_current();
+            var web = context.get_web();
+            var list = web.get_lists().getByTitle('SendEmailList');
+            var listItemCreationInfo = new SP.ListItemCreationInformation();
+            var newItem = list.addItem(listItemCreationInfo);
+
+            newItem.set_item('To', to);
+            newItem.set_item('Subject', subject);
+            newItem.set_item('Body', body);
+            newItem.set_item('Status', "No");
+            newItem.set_item('InvoiceNo', invoiceNo);
+            newItem.set_item('ActionID', actionID);
+
+            newItem.update();
+            context.load(newItem);
+            context.executeQueryAsync(Function.createDelegate(this, this.addEmailsuccess),
+                                  Function.createDelegate(this, this.addEmailfailed));
+        } catch (e) { alert('error:' + e.Message); }
+    }
+
+    function addEmailsuccess() {
+        //  alert('Email created');
+        window.location = window.location;
+    }
+    function addEmailfailed(sender, args) {
+        alert('failed. Message:' + args.get_message());
+    }
+
+    //**********Add Task
+    function addTask(assginTo, taskName, taskType, dueDate, comment, invNo, deviceId, actID) {
+        try {
+            debugger;
+            taskName = SetStepName2(taskName);
+            taskType = SetStepName2(taskType);
+            var context = new SP.ClientContext.get_current();
+            var web = context.get_web();
+            var list = web.get_lists().getByTitle('Task');
+            var listItemCreationInfo = new SP.ListItemCreationInformation();
+            var newItem = list.addItem(listItemCreationInfo);
+
+            newItem.set_item('AssignedTo', assginTo);
+            newItem.set_item('Title', taskName);
+            newItem.set_item('tasktype', taskType);
+            newItem.set_item('DueDate', dueDate);
+            newItem.set_item('Comments', comment);
+            newItem.set_item('InvoiceNo', invNo);
+            newItem.set_item('actID', actID);
+
+            newItem.update();
+            context.load(newItem);
+            context.executeQueryAsync(Function.createDelegate(this, this.addTasksuccess(taskName, deviceId)),
+                                  Function.createDelegate(this, this.addTaskfailed));
+        } catch (e) { alert('error:' + e.Message); }
+    }
+    function addTasksuccess(taskName, deviceId) {
+        //push notification here.
+        //var deviceID = "";
+        var notificationAPIURL = "https://microsoft-apiapp8279cab770f148628b34e9c1880e2321.azurewebsites.net:443/Notifications/Send/apns/You have a new task - " + taskName + "/" + deviceId;
+        $.ajax({
+            url: notificationAPIURL,
+            dataType: "jsonp",
+            success: function () {
+                console.log(notificationAPIURL);
+            }
+        });
+        //alert('Task created');
+    }
+    function addTaskfailed(sender, args) {
+        alert('failed. Message:' + args.get_message());
+    }
+
+    //New***Get CustomerInfo
+    function retrieveCustomerInfo(invid) {
+        debugger;
+        var clientContext = new SP.ClientContext.get_current();
+        var oWebsite;
+        var camlQuery;
+        var oList;
+        oWebsite = clientContext.get_web();
+        oList = oWebsite.get_lists().getByTitle('CustomerInfo');
+        camlQuery = new SP.CamlQuery();
+
+        camlQuery.set_viewXml("<View><Query><Where><Contains><FieldRef Name='RelatedInvoice_x003a_InvNo'/><Value Type='Text'>" + invid + "</Value></Contains></Where></Query></View>");
+
+        var oItemColl = oList.getItems(camlQuery);
+        clientContext.load(oItemColl);
+
+        clientContext.executeQueryAsync(function () {
+            var listItemEnumerator = oItemColl.getEnumerator();
+
+            while (listItemEnumerator.moveNext()) {
+                var oListItem = listItemEnumerator.get_current();
+                debugger;
+                var ClientObj = oListItem.get_item("ClientName");
+                var ClientName = ClientObj.get_lookupValue();
+                var ClientInerID = ClientObj.get_lookupId();
+                var PhoneNo = oListItem.get_item("PhoneNo");
+                var Address = oListItem.get_item("Address");
+                var Industry = oListItem.get_item("Industry");
+                var ClientID = oListItem.get_item("ID");
+                var ClientDescription = oListItem.get_item("ClientDescription");
+                var Status = oListItem.get_item("Status");
+                var RelatedInvoiceNo = oListItem.get_item("RelatedInvoice_x003a_InvNo");
+
+                customerInfoVM.ClientName(ClientName);
+                customerInfoVM.PhoneNo(PhoneNo);
+                customerInfoVM.Address(Address);
+                customerInfoVM.Industry(Industry);
+                customerInfoVM.ClientID(ClientID);
+                customerInfoVM.ClientDescription(ClientDescription);
+                customerInfoVM.Status(Status);
+            }
+
+        }, onFailed);
+    }
+
+    function retrieveCustomerKPI(clientName) {
+        debugger;
+        var clientContext = new SP.ClientContext.get_current();
+        var oWebsite;
+        var camlQuery;
+        var oList;
+        oWebsite = clientContext.get_web();
+        oList = oWebsite.get_lists().getByTitle('CustomerKPI');
+        camlQuery = new SP.CamlQuery();
+
+        camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><Where><Contains><FieldRef Name='Customer_x0020_Name'/><Value Type='Text'>" + clientName + "</Value></Contains></Where></Query></View>");
+
+        var oItemColl = oList.getItems(camlQuery);
+        clientContext.load(oItemColl);
+
+        clientContext.executeQueryAsync(function () {
+            var listItemEnumerator = oItemColl.getEnumerator();
+
+            while (listItemEnumerator.moveNext()) {
+                var oListItem = listItemEnumerator.get_current();
+                debugger;
+                var volume = oListItem.get_item("Volume");
+                var volumntrend = oListItem.get_item("Volume_x0020_Trend");
+                var avgvalue = oListItem.get_item("Average_x0020_Value");
+                var avgvaluetrend = oListItem.get_item("Average_x0020_Value_x0020_Trend");
+                var history = oListItem.get_item("History");
+                var historytrend = oListItem.get_item("History_x0020_Trend");
+                var paymenthist = oListItem.get_item("Payment_x0020_History");
+                var paymenthisttrend = oListItem.get_item("Payment_x0020_History_x0020_Tren");
+                var dispute = oListItem.get_item("Dispute");
+                var disputetrend = oListItem.get_item("Dispute_x0020_Trend");
+                var response = oListItem.get_item("Response");
+                var responsetrend = oListItem.get_item("Response_x0020_Trend");
+                var reliability = oListItem.get_item("Reliability");
+                var reltrend = oListItem.get_item("Reliability_x0020_Trend");
+                var variability = oListItem.get_item("Variability");
+                var varTrend = oListItem.get_item("NewColumn3");
+
+                customerKPIVM.ClientName(clientName);
+                customerKPIVM.Volume(volume);
+                customerKPIVM.VolumeTrend(volumntrend);
+                customerKPIVM.AvgValue(avgvalue);
+                customerKPIVM.AvgValueTrend(avgvaluetrend);
+                customerKPIVM.History(history);
+                customerKPIVM.HistoryTrend(historytrend);
+                customerKPIVM.PaymentHistory(paymenthist);
+                customerKPIVM.PaymentHistoryTrend(paymenthisttrend);
+                customerKPIVM.Dispute(dispute);
+                customerKPIVM.DisputeTrend(disputetrend);
+                customerKPIVM.Response(response);
+                customerKPIVM.ResponseTrend(responsetrend);
+                customerKPIVM.Reliability(reliability);
+                customerKPIVM.RelTrend(reltrend);
+                customerKPIVM.Variability(variability);
+                customerKPIVM.VarTrend(varTrend);
+            }
+        }, onFailed);
+    }
+
+    //On FAILED
+    function onFailed(sender, args) {
+        alert('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+    }
+
+    //Default login department lookup
+
+
+    //Reduce Amount
+    function ReduceAmountAndCompleted(invid) {
+        debugger;
+        var clientContext = new SP.ClientContext.get_current();
+        var oWebsite;
+        var camlQuery;
+        var oList;
+        oWebsite = clientContext.get_web();
+        oList = oWebsite.get_lists().getByTitle('Invoice detail');
+        camlQuery = new SP.CamlQuery();
+
+        camlQuery.set_viewXml("<View><Query><Where><Eq><FieldRef Name='Invoice_x0020__x0023_'/><Value Type='Text'>" + invid + "</Value></Eq></Where></Query></View>");
+
+        var oItemColl = oList.getItems(camlQuery);
+        clientContext.load(oItemColl);
+
+        clientContext.executeQueryAsync(function () {
+            debugger;
+            var listItemInfo = '';
+            //var listItemEnumerator = this.collListItem.getEnumerator();
+            var listItemEnumerator = oItemColl.getEnumerator();
+            if (listItemEnumerator.moveNext()) {
+                var oListItem = listItemEnumerator.get_current();
+                debugger;
+                var amount = oListItem.get_item("Amount");
+
+                var newAmt = amount - reducedAmt;
+                oListItem.set_item('Amount', parseInt(newAmt));
+                //  oListItem.set_item('CurrentStep', CurStep.NOSTEP);
+                //  oListItem.set_item('WFStatus', WFStatus.PAID);
+
+                oListItem.update();
+
+                // invoiceInfoVM.amount(newAmt);
+                clientContext.executeQueryAsync(onQuerySucceeded, onQueryFailed);
+                retrieveInvoiceInfo(invid);
+                return false;
+            }
+            else {
+                alert(" no find!");
+            }
+        }, onQueryFailed);
+    }
+
+    function AddInitialAmount() {
+        var dfd = $.Deferred(function () {
+            debugger;
+            var clientContext = new SP.ClientContext.get_current();
+            var oWebsite;
+            var camlQuery;
+            var oList;
+            oWebsite = clientContext.get_web();
+            oList = oWebsite.get_lists().getByTitle('InitialAmont');
+            camlQuery = new SP.CamlQuery();
+
+            camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><Where><Eq><FieldRef Name='ID'/><Value Type='Text'>1</Value></Eq></Where></Query></View>");
+
+            var oItemColl = oList.getItems(camlQuery);
+            clientContext.load(oItemColl);
+            clientContext.executeQueryAsync(function () {
+                debugger;
+                var listItemInfo = '';
+                //var listItemEnumerator = this.collListItem.getEnumerator();
+                var listItemEnumerator = oItemColl.getEnumerator();
+                if (listItemEnumerator.moveNext()) {
+                    var oListItem = listItemEnumerator.get_current();
+                    debugger;
+                    var amount = oListItem.get_item("InitialAmount");
+
+                    var newAmt = amount + reducedAmt;
+                    oListItem.set_item('InitialAmount', parseInt(newAmt));
+
+
+
+
+                    oListItem.update();
+
+                    // invoiceInfoVM.amount(newAmt);
+                    debugger;
+                    clientContext.executeQueryAsync(function () { ReduceAmountAndCompleted(invoiceInfoVM.invoiceNo()) }, onFailed);
+
+                    //window.location = window.location;
+
+                }
+                else {
+                    alert(" no find!");
+                }
+
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+    }
+
+    function onQuerySucceeded() {
+        retrieveInvoiceInfo(invoiceInfoVM.invoiceNo());
+        alert('Sync Completed.');
+
+    }
+
+    function onQueryFailed(sender, args) {
+
+        alert('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+    }
+
+
+    //Workflow commment
+    var WFCommentVM = {
+        allCommentArray: ko.observableArray([])
+    }
+    //Step commment
+    var StepCommentVM = {
+        allCommentArray: ko.observableArray([])
+    }
+    //ko.applyBindings(StepCommentVM, $(".111111111111")[0]);
+
+    //stepGuid ==  ID in ActionHistory
+    function retrieveStepComment(stepGuid, needRebind) {
+        debugger;
+        tempPicArrary = [];
+        tempAllArray = [];
+        var i = 0;
+        var UserId;
+        //StepCommentVM.allCommentArray.removeAll();
+        //stepGuid='236'
+        var clientContext = new SP.ClientContext.get_current();
+        var oWebsite;
+        var camlQuery;
+        var oList;
+        oWebsite = clientContext.get_web();
+        oList = oWebsite.get_lists().getByTitle('WorkflowComments');
+        camlQuery = new SP.CamlQuery();
+
+        camlQuery.set_viewXml("<View><Query><OrderBy><FieldRef Name='Modified' Ascending='FALSE'></FieldRef></OrderBy><GroupBy Collapse = 'TRUE'><FieldRef Name = 'WorkflowId'/></GroupBy><Where><Eq><FieldRef Name='WorkflowId'/><Value Type='Text'>" + stepGuid + "</Value></Eq></Where></Query></View>");
+
+        var oItemColl = oList.getItems(camlQuery);
+        clientContext.load(oItemColl);
+
+        clientContext.executeQueryAsync(function () {
+            var listItemEnumerator = oItemColl.getEnumerator();
+
+            while (listItemEnumerator.moveNext()) {
+                var oListItem = listItemEnumerator.get_current();
+                debugger;
+                var Author = oListItem.get_item("Author");
+                var AuthorName = Author.get_lookupValue();
+                var AuthorID = Author.get_lookupId();
+                //var AuthorEmail = Author.get_email();
+                // var WorkflowId = oListItem.get_item("WorkflowId").$1S_1;
+                var Comments = oListItem.get_item("Comments");
+                var InvoiceNumber = oListItem.get_item("InvoiceNumber");
+                var tempdate = oListItem.get_item("Modified");
+                var ModifiedDate = (tempdate == null || tempdate.length == 0) ? "no data" : tempdate;
+
+                //var ImgSrc = "/sites/mktdemodev/SitePages/Invoice/app/images/" + AuthorName.split(' ').join('_') + ".png";
+                var ImgSrc = "";
+
+                tempAllArray.push({
+                    WorkflowId: stepGuid,
+                    UserID: AuthorID,
+                    InvoiceNumber: InvoiceNumber,
+                    AuthorName: AuthorName,
+                    Comments: Comments,
+                    ModifiedDate: ModifiedDate,
+                    ImgSrc: ImgSrc
+                });
+            }
+
+            getUserPhoto();
+
+
+
+
+            if (needRebind) {
+                ko.applyBindings(StepCommentVM, $("#workflowConversation")[0]);
+                $("#workflowConversation").addClass("ready");
+            }
+
+        }, onFailed);
+    }
+    function getUserPhoto() {
+        debugger;
+        tempPicArrary = [];
+
+        var i = 0;
+        var UserId;
+        var context = SP.ClientContext.get_current();
+        var web = context.get_web();
+        var userInfoList = web.get_siteUserInfoList();
+        var camlQuery = new SP.CamlQuery();
+        // camlQuery.set_viewXml('<View><Query><Where><Eq><FieldRef Name="ID"/><Value Type="Number">' + UserId + '</Value></Eq></Where></Query><RowLimit>1</RowLimit></View>');
+        camlQuery.set_viewXml('<View><Query><Where><IsNotNull><FieldRef Name="ID"/></IsNotNull></Where></Query></View>');
+
+        var listItems = userInfoList.getItems(camlQuery);
+        context.load(listItems);
+        context.executeQueryAsync(function () {
+            debugger;
+            var listItemEnumerator = listItems.getEnumerator();
+
+            while (listItemEnumerator.moveNext()) {
+
+
+                var item = listItemEnumerator.get_current();
+                var ID = item.get_item('ID');
+                var picture = item.get_item('Picture');
+
+
+                var userPic = (picture == null) ? "/_layouts/15/images/PersonPlaceholder.42x42x32.png?rev=30" : picture.get_url();
+
+
+                tempPicArrary.push([{ ID: ID, userPic: userPic }]);
+
+            }
+            //Push data to vm
+
+            for (i = 0; i < tempAllArray.length; i++) {
+                debugger;
+
+                UserId = tempAllArray[i].UserID; // user id
+                for (j = 0; j < tempPicArrary.length; j++) {
+                    if (UserId == tempPicArrary[j][0].ID) {
+                        debugger;
+                        var picUrl = tempPicArrary[j][0].userPic;
+                        tempAllArray[i].ImgSrc = picUrl;
+                    }//end if
+
+                }//end loop j
+            }// end loop i
+
+            StepCommentVM.allCommentArray.removeAll();
+            for (var k in tempAllArray) {
+                StepCommentVM.allCommentArray.push(tempAllArray[k]);
+            };
+
+
+
+
+
+
+
+        }, onFailed);//End get photo
+
+    }
+    //******************Update Inovice list after each action******************
+    function UpdateInvoice(invNo, taskType, owner) {
+        var dfd = $.Deferred(function () {
+            debugger;
+
+            taskType = SetStepName2(taskType);
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('Invoice detail');
+
+            var camlQuery = new SP.CamlQuery();
+            if (invNo == "") {
+                alert("No selected invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><Where><Eq><FieldRef Name='Invoice_x0020__x0023_'/><Value Type='Text'>" + invNo + "</Value></Eq></Where></Query></View>");
+            }
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+                var listItemEnumerator = collListItem.getEnumerator();
+                if (listItemEnumerator.moveNext()) {
+                    debugger;
+                    var oListItem = listItemEnumerator.get_current();
+
+                    oListItem.set_item('CurrentStep', taskType);
+                    oListItem.set_item('Owner', owner);
+                    if (taskType != CurStep.COMPLETED) {
+                        oListItem.set_item('WFStatus', WFStatus.INPROGRESS);
+                    }
+                    else {
+                        oListItem.set_item('WFStatus', WFStatus.PAID);
+
+                    }
+                    oListItem.set_item('LastStepDate', getToday().toLocaleDateString());
+
+                    oListItem.update();
+
+                }
+                else {
+                    alert("Action no find!");
+                }
+
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+    };
+
+
+    function UpdateInvoice_Awaiting(invNo, taskType, owner) {
+        var dfd = $.Deferred(function () {
+            debugger;
+
+            taskType = SetStepName2(taskType);
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('Invoice detail');
+
+            var camlQuery = new SP.CamlQuery();
+            if (invNo == "") {
+                alert("No selected invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><Where><Eq><FieldRef Name='Invoice_x0020__x0023_'/><Value Type='Text'>" + invNo + "</Value></Eq></Where></Query></View>");
+            }
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+                var listItemEnumerator = collListItem.getEnumerator();
+                if (listItemEnumerator.moveNext()) {
+                    debugger;
+                    var oListItem = listItemEnumerator.get_current();
+
+                    oListItem.set_item('CurrentStep', taskType);
+                    oListItem.set_item('Owner', owner);
+                    if (taskType != CurStep.COMPLETED) {
+                        oListItem.set_item('WFStatus', WFStatus.AWAITING);
+                    }
+                    else {
+                        oListItem.set_item('WFStatus', WFStatus.PAID);
+
+                    }
+                    oListItem.set_item('LastStepDate', getToday().toLocaleDateString());
+                    oListItem.update();
+
+                }
+                else {
+                    alert("Action no find!");
+                }
+
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+    };
+
+    //**************PTP
+    var PTPDetailVM = {
+        allPTPArray: ko.observableArray([])
+    }
+    ko.applyBindings(PTPDetailVM, $("#TestPTPDIV")[0]);
+    //invid
+    function RetrievePTP_Detail(invid) {
+        PTPDetailVM.allPTPArray.removeAll();
+        debugger;
+        var clientContext = new SP.ClientContext.get_current();
+        var oWebsite;
+        var camlQuery;
+        var oList;
+        oWebsite = clientContext.get_web();
+        oList = oWebsite.get_lists().getByTitle('PTPInvoice');
+        camlQuery = new SP.CamlQuery();
+
+        camlQuery.set_viewXml("<View><Query><Where><Eq><FieldRef Name='NewColumn1'/><Value Type='Text'>" + invid + "</Value></Eq></Where></Query></View>");
+
+        var oItemColl = oList.getItems(camlQuery);
+        clientContext.load(oItemColl);
+
+        clientContext.executeQueryAsync(function () {
+            var listItemEnumerator = oItemColl.getEnumerator();
+            debugger;
+            while (listItemEnumerator.moveNext()) {
+                var oListItem = listItemEnumerator.get_current();
+                debugger;
+                var amount = oListItem.get_item("Amount");
+                var invoiceNo = invid;
+
+                var dueDate = oListItem.get_item("DueDate").format('MM/dd/yyyy');
+                var percentage = oListItem.get_item("Percentage") * 100;
+                //var dueDate = oListItem.get_item("DueDate").format('MM/dd/yyyy');
+
+                PTPDetailVM.allPTPArray.push({
+                    invoiceNo: invoiceNo,
+                    amount: amount,
+                    dueDate: dueDate,
+                    percentage: percentage
+
+                })
+            }
+
+        }, onFailed);
+
+    }
+
+
+
+    //Add comment to WFComment list
+    function addComment(comment, invNo, actID, needRefresh, step) {
+        try {
+            debugger;
+            if ((comment == '' || comment == null) && step.name == 'Call Customer') {
+                comment = DefaultComment.PTP;
+
+            }
+            var context = new SP.ClientContext.get_current();
+            var web = context.get_web();
+
+            var list = web.get_lists().getByTitle('WorkflowComments');
+            var listItemCreationInfo = new SP.ListItemCreationInformation();
+            var newItem = list.addItem(listItemCreationInfo);
+
+
+            newItem.set_item('Comments', comment);
+            newItem.set_item('InvoiceNumber', invNo);
+            newItem.set_item('WorkflowId', actID);
+
+            newItem.update();
+            context.load(newItem);
+
+            debugger;
+
+
+
+            AddActivity(step.name, '@' + LoginUserVM.Name() + commentFormat + comment, step.actionId, invoiceInfoVM.invoiceNo(), ActionInfoVM.workflowID(), isTask.No, invoiceInfoVM.amount(), invoiceInfoVM.clientName(), invoiceInfoVM.level());
+
+
+
+
+            context.executeQueryAsync(function () {
+                if (needRefresh) {
+                    retrieveStepComment(actID, false);
+                    window._retrieveWFComment(invNo);
+                    //window._retrieveInvoice_ActivityStream(invNo);
+                }
+            },
+                                  onFailed);
+        } catch (e) { alert('error:' + e.Message); }
+    }
+
+    //Add PTP data to PRPInvoice list
+    function addPTPdata(ptpArray) {
+        try {
+            debugger;
+            var context = new SP.ClientContext.get_current();
+            var web = context.get_web();
+            var list = web.get_lists().getByTitle('PTPInvoice');
+            var listItemCreationInfo = new SP.ListItemCreationInformation();
+            for (i = 0; i < ptpArray.length; i++) {
+
+                var newItem = list.addItem(listItemCreationInfo);
+                newItem.set_item('InvoiceNo', invoiceInfoVM.invoiceNo());
+                newItem.set_item('Amount', ptpArray[i][0] * (invoiceInfoVM.amount()) / 100);
+                newItem.set_item('DueDate', ptpArray[i][1]);
+                newItem.set_item('Percentage', ptpArray[i][0] / 100);
+
+                newItem.update();
+                context.load(newItem);
+
+            }
+
+
+            context.executeQueryAsync(Function.createDelegate(this, this.addTasksuccess),
+                                  Function.createDelegate(this, this.addTaskfailed));
+        } catch (e) { alert('error:' + e.Message); }
+    }
+
+    //Completed current task.
+    function CompleteTask(step) {
+        var dfd = $.Deferred(function () {
+            debugger;
+
+
+            var taskType = SetStepName2(step.name);
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('Task');
+
+            var camlQuery = new SP.CamlQuery();
+            if (step.invoiceNumber == "") {
+                alert("Not found this invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><RowLimit>1</RowLimit><Query><OrderBy><FieldRef Name='Modified' Ascending='FALSE'></FieldRef></OrderBy><Where><And><And><Eq><FieldRef Name='InvoiceNo' ></FieldRef><Value Type='Text'>" + step.invoiceNumber + "</Value></Eq><Eq><FieldRef Name='tasktype'></FieldRef><Value Type='Text'>" + taskType + "</Value></Eq></And><And><IsNotNull><FieldRef Name='Status'></FieldRef></IsNotNull><IsNotNull><FieldRef Name='Title'></FieldRef></IsNotNull></And></And></Where></Query></View>");
+            }
+
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+                debugger;
+                if (step.nextStep) {
+                    if (step.nextStep.name != WF_STEP_NAME.CREATEMAIL) {
+
+                        var listItemEnumerator = collListItem.getEnumerator();
+                        if (listItemEnumerator.moveNext()) {
+                            var oListItem = listItemEnumerator.get_current();
+
+                            oListItem.set_item('Status', ActionStatus.COMPLETE);
+
+                            oListItem.update();
+                        }
+                        else {
+                            alert("Task not find or already completed");
+                        }
+                    }
+                } else {
+                    if (taskType == Task_Type.CALL) {
+                        var listItemEnumerator = collListItem.getEnumerator();
+                        if (listItemEnumerator.moveNext()) {
+                            var oListItem = listItemEnumerator.get_current();
+
+                            oListItem.set_item('Status', ActionStatus.COMPLETE);
+
+                            oListItem.update();
+                        }
+                        else {
+                            alert("Task not find or already completed");
+                        }
+
+                    }
+                }
+
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+        });
+        return dfd.promise();
+    };
+
+
+    function AdvanceWorkflow(step) {
+        if (step.name == WF_STEP_NAME.CREATEMAIL) {
+            debugger;
+            var nextStepActionIdQryString = "";
+            if (step.nextStep) {
+                var nextStepActionIdQryString = "&nextActionId=" + step.nextStep.actionId;
+            }
+            var workflowIDQryString = "&workflowId=" + step.workflowID;
+
+            window.location.href = ("/sites/mktdemodev/SitePages/Invoice/CreateLetter.aspx?invoiceNumber=" + step.invoiceNumber + "&actionID=" + step.actionId + nextStepActionIdQryString + workflowIDQryString);
+        }
+        else if (step.name == WF_STEP_NAME.APPROVAL) {
+            UpdateActList(step).done(function () {
+                debugger;
+                CompleteTask(step).done(function () {
+                    if (step.nextStep) {
+                        var nextStepName = step.nextStep.name;
+                        OpenActionStep(step.nextStep).done(function () {
+
+                            addTask(step.nextStep.stepOwner.id, nextStepName, nextStepName, "05/20/2015", "place holder", step.invoiceNumber, step.nextStep.deviceId, step.nextStep.actionId);
+                            AddActivity(Task_Type.APPROVAL, DefaultComment.Approval, step.actionId, invoiceInfoVM.invoiceNo(), ActionInfoVM.workflowID(), isTask.Yes, invoiceInfoVM.amount(), invoiceInfoVM.clientName(), invoiceInfoVM.level());
+
+                            if (nextStepName == WF_STEP_NAME.COMPLETE) {
+                                UpdateInvoice_Awaiting(step.invoiceNumber, step.nextStep.name, step.nextStep.stepOwner.id).done(function () {
+                                    debugger;
+                                    retrieveWFInfoAndDrawGraph(Day60queryString, "#Day60Slide"); //no refresh
+                                    updateCurrentActionInfo(step.nextStep);
+                                    requestEmail(11, step.nextStep.stepOwner.email, "");
+
+                                    //addEmail(step.nextStep.stepOwner.email, WF_EMAIL_SUBJECT.APPROVAL, WF_EMAIL_BODY.APPROVAL + step.invoiceNumber, step.invoiceNumber, step.actionId);
+                                }).fail(function () { alert("Error！"); });
+                            }
+                            else {
+                                UpdateInvoice(step.invoiceNumber, step.nextStep.name, step.nextStep.stepOwner.id).done(function () {
+
+                                    debugger;
+                                    retrieveWFInfoAndDrawGraph(Day60queryString, "#Day60Slide"); //no refresh
+                                    updateCurrentActionInfo(step.nextStep);
+                                    if (nextStepName === WF_STEP_NAME.CREATEMAIL) {
+                                        //addEmail(WF_EMAIL_TO, WF_EMAIL_SUBJECT.SEND_LETTER_REMINDER, createEmailReminder2(WF_EMAIL_BODY.SEND_LETTER_REMINDER, step), step.invoiceNumber, step.actionId);
+                                        //addEmail(step.nextStep.stepOwner.email, WF_EMAIL_SUBJECT.CREATE_LETTER_REMINDER, createEmailReminder(WF_EMAIL_BODY.CREATE_LETTER_REMINDER, step.nextStep), step.invoiceNumber, step.actionId);
+                                        var payload = "{invoicenumber}~" + step.invoiceNumber + "|{ActionId}~" + step.nextStep.actionId + "|{NextActionId}~" + step.nextStep.nextStep.actionId;
+                                        requestEmail(7, step.nextStep.stepOwner.email, payload);
+
+                                    } else {
+                                        debugger;
+                                        addEmail(step.nextStep.stepOwner.email, WF_EMAIL_SUBJECT.APPROVAL, WF_EMAIL_BODY.APPROVAL + step.invoiceNumber, step.invoiceNumber, step.actionId);
+                                    }
+                                }).fail(function () { alert("Error！"); });
+                            }
+                        }).fail(function () { alert("Error！"); });
+                    }
+                }).fail(function () { alert("Error for CompleteTask！"); });
+            }).fail(function () { alert("Error！"); });
+        }
+        if (step.name == WF_STEP_NAME.MAIL) {
+            UpdateActList(step).done(function () {
+                CompleteTask(step).done(function () {
+                    if (step.nextStep) {
+                        var nextStepName = step.nextStep.name;
+                        OpenActionStep(step.nextStep).done(function () {
+                            UpdateInvoice(step.invoiceNumber, step.nextStep.name, step.nextStep.stepOwner.id).done(function () {
+                                retrieveWFInfoAndDrawGraph(Day60queryString, "#Day60Slide");
+                                updateCurrentActionInfo(step.nextStep);
+                                addTask(step.nextStep.stepOwner.id, nextStepName, nextStepName, "06/20/2015", null, step.invoiceNumber, step.nextStep.deviceId, step.nextStep.actionId);
+                                AddActivity(Task_Type.MAIL, DefaultComment.Send, step.actionId, invoiceInfoVM.invoiceNo(), ActionInfoVM.workflowID(), isTask.Yes, invoiceInfoVM.amount(), invoiceInfoVM.clientName(), invoiceInfoVM.level());
+
+                                //addEmail(step.nextStep.stepOwner.email, WF_EMAIL_SUBJECT.MAIL, WF_EMAIL_BODY.MAIL + step.invoiceNumber, step.invoiceNumber, step.actionId);
+                                //var payload = "{invoicenumber}~"+step.invoiceNumber;
+                                requestEmail(9, step.nextStep.stepOwner.email, "");
+                            }).fail(function () { alert("Update Invoice Error！"); });
+
+                        }).fail(function () { alert("Update Invoice Error！"); });
+                    }
+                }).fail(function () { alert("Error for CompleteTask！"); });
+
+
+            }).fail(function () { alert("Update Action Error！"); });
+        }
+
+        if (step.name == WF_STEP_NAME.CALL) {
+            if (step.subflow.steps[0].actionId) {
+                UpdateCall_ActList(step).done(function () {
+                    OpenActionStep(step.subflow.steps[0]).done(function () {
+                        CompleteTask(step).done(function () {
+                            debugger;
+                            UpdateInvoice(step.invoiceNumber, step.subflow.steps[0].name, step.subflow.steps[0].stepOwner.id).done(function () {
+                                retrieveWFInfoAndDrawGraph(Day60queryString, "#Day60Slide");
+                                updateCurrentActionInfo(step.subflow.steps[0]);
+                                addTask(step.subflow.steps[0].stepOwner.id, step.subflow.steps[0].name, step.subflow.steps[0].name, "05/20/2015", null, step.invoiceNumber, step.subflow.steps[0].deviceId, step.subflow.steps[0].actionId);
+                                AddActivity(Task_Type.CALL, DefaultComment.PTPApproval, step.actionId, invoiceInfoVM.invoiceNo(), ActionInfoVM.workflowID(), isTask.Yes, invoiceInfoVM.amount(), invoiceInfoVM.clientName(), invoiceInfoVM.level());
+
+                                //var payload = "{invoicenumber}~"+step.invoiceNumber;
+
+                                //addEmail(step.subflow.steps[0].stepOwner.email, WF_EMAIL_SUBJECT.PTP_APPROVAL, createEmailReminderPTP(WF_EMAIL_BODY.CREATE_LETTER_REMINDER, step), step.invoiceNumber, step.actionId);
+                                var payload = "{invoicenumber}~" + step.invoiceNumber;
+                                requestEmail(10, step.subflow.steps[0].stepOwner.email, payload);
+                                //addPTPdata(invoiceInfoVM.amount(), step.invoiceNumber);
+                            }).fail(function () { alert("Error！"); });
+                        }).fail(function () { alert("Error for CompleteTask！"); });
+                    }).fail(function () { alert("Error！"); });
+                }).fail(function () { alert("Error！"); });
+
+            }
+        }
+    }
+
+    //*************Add Activetity stream for each action
+    function AddActivity(actType, comment, actID, invNo, workflowID, isTask, amount, customer, customerProfile) {
+        try {
+            debugger;
+
+            var context = new SP.ClientContext.get_current();
+            var web = context.get_web();
+            var list = web.get_lists().getByTitle('ActivityStream');
+            var listItemCreationInfo = new SP.ListItemCreationInformation();
+            var newItem = list.addItem(listItemCreationInfo);
+
+            newItem.set_item('CompletedDate', getToday().toLocaleDateString());
+            newItem.set_item('ActionType', actType);
+            newItem.set_item('Comment', comment);
+            newItem.set_item('ActionID', actID);
+            newItem.set_item('InvoiceNo', invNo);
+            newItem.set_item('WorkflowID', workflowID);
+            newItem.set_item('IsTask', isTask);
+            newItem.set_item('InvoiceAmount', amount);
+            newItem.set_item('Customer', customer);
+            newItem.set_item('CustomerProfile', customerProfile);
+
+            newItem.update();
+            context.load(newItem);
+
+
+        } catch (e) { alert('error:' + e.Message); }
+    }
+
+
+    //*************Roll Back the whole workflow: 5 list
+
+    $("#invoiceNo_Div").unbind('click').click(function () {
+        debugger;
+        RollBackAll(invoiceInfoVM.invoiceNo());
+
+    });
+
+    function RollBackAll(invID) {
+        var spinner = new Spinner(opts).spin(target);
+        //Deleted all data in 3 list below
+        GetFirstOwnerAndStartDate(invID).done(function () {
+            RollBackPTP(invID).done(function () {
+                RollBackTasks(invID).done(function () {
+                    RollBackComments(invID).done(function () {
+                        ////Update data in 2 list below
+                        RollBackInvoice(invID).done(function () {
+                            RollBackActions(invID).done(function () {
+                                RollBackActivityStream(invID).done(function () {
+                                    spinner.stop();
+                                }).fail(function () { alert("Error RollBackActivityStream！"); });
+                            }).fail(function () { alert("Error RollBackActions！"); });
+
+                        }).fail(function () { alert("Error RollBackInvoice！"); });
+                    }).fail(function () { alert("Error RollBackTasks！"); });
+                }).fail(function () { alert("Error RollBackComments！"); });
+            }).fail(function () { alert("Error RollBackPTP！"); });
+        }).fail(function () { alert("Error GetFirstOwnerAndStartDate！"); });
+
+
+
+
+    }
+
+    function RollBackPTP(invID) {
+        debugger;
+        var dfd = $.Deferred(function () {
+            debugger;
+
+
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('PTPInvoice');
+
+            var camlQuery = new SP.CamlQuery();
+
+            camlQuery.set_viewXml("<View><Query><Where><Eq><FieldRef Name='InvoiceNo'></FieldRef> <Value Type='Text'>" + invID + "</Value></Eq></Where></Query></View>");
+
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+
+                var listItemEnum = collListItem.getEnumerator();
+
+                var counter = 0;
+
+                var itemArr = new Array();
+
+                while (listItemEnum.moveNext()) {
+
+                    var listItem = listItemEnum.get_current();
+
+                    itemArr[counter] = listItem.get_item("ID");
+
+                    counter++;
+
+                }
+                for (var id in itemArr) {
+
+                    var spItem = oList.getItemById(itemArr[id]);
+
+                    spItem.deleteObject();
+
+                }
+                clientContext.executeQueryAsync(onSuccessClean, onFailed);
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+
+    }
+    function RollBackTasks(invID) {
+        debugger;
+
+        var dfd = $.Deferred(function () {
+            debugger;
+
+
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('Task');
+
+            var camlQuery = new SP.CamlQuery();
+
+            camlQuery.set_viewXml("<View><Query><Where><Eq><FieldRef Name='InvoiceNo'></FieldRef> <Value Type='Text'>" + invID + "</Value></Eq></Where></Query></View>");
+
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+
+                var listItemEnum = collListItem.getEnumerator();
+
+                var counter = 0;
+
+                var itemArr = new Array();
+
+                while (listItemEnum.moveNext()) {
+
+                    var listItem = listItemEnum.get_current();
+
+                    itemArr[counter] = listItem.get_item("ID");
+
+                    counter++;
+
+                }
+                for (var id in itemArr) {
+
+                    var spItem = oList.getItemById(itemArr[id]);
+
+                    spItem.deleteObject();
+
+                }
+                clientContext.executeQueryAsync(onSuccessClean, onFailed);
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+    }
+    function RollBackComments(invID) {
+        debugger;
+
+        var dfd = $.Deferred(function () {
+            debugger;
+
+
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('WorkflowComments');
+
+            var camlQuery = new SP.CamlQuery();
+
+            camlQuery.set_viewXml("<View><Query><Where><And><Eq><FieldRef Name='InvoiceNumber'></FieldRef><Value Type='Text'>" + invID + "</Value></Eq><IsNotNull><FieldRef Name='WorkflowId'></FieldRef></IsNotNull></And></Where></Query></View>");
+
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+
+                var listItemEnum = collListItem.getEnumerator();
+
+                var counter = 0;
+
+                var itemArr = new Array();
+
+                while (listItemEnum.moveNext()) {
+
+                    var listItem = listItemEnum.get_current();
+
+                    itemArr[counter] = listItem.get_item("ID");
+
+                    counter++;
+
+                }
+                for (var id in itemArr) {
+
+                    var spItem = oList.getItemById(itemArr[id]);
+
+                    spItem.deleteObject();
+
+                }
+                debugger;
+                clientContext.executeQueryAsync(onSuccessClean, onFailed);
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+
+
+    }
+
+    function RollBackInvoice(invID) {
+        debugger;
+        var dfd = $.Deferred(function () {
+
+
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('Invoice detail');
+
+            var camlQuery = new SP.CamlQuery();
+            if (invID == "") {
+                alert("No invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><Query><Where><Eq><FieldRef Name='Invoice_x0020__x0023_'></FieldRef> <Value Type='Text'>" + invID + "</Value></Eq></Where></Query></View>");
+            }
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+                var listItemEnumerator = collListItem.getEnumerator();
+                if (listItemEnumerator.moveNext()) {
+                    debugger;
+                    var oListItem = listItemEnumerator.get_current();
+
+                    //  alert(firststep_Owner);
+                    oListItem.set_item('Owner', firststep_Owner);
+                    oListItem.set_item('CurrentStep', CurStep.APPROVAL);//Can set null also
+                    oListItem.set_item('WFStatus', WFStatus.INPROGRESS);
+                    //   alert(firststep_StartDate);
+                    oListItem.set_item('LastStepDate', firststep_StartDate);
+                    oListItem.set_item('PaidDate', null);
+
+
+
+                    oListItem.update();
+
+                }
+                else {
+                    alert("RollBackInvoice: Invoice no find!");
+                }
+                clientContext.executeQueryAsync(onSuccessClean, onFailed);
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+
+    }
+    function RollBackActions(invID) {
+        debugger;
+        var dfd = $.Deferred(function () {
+
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('ActionHistory');
+            var camlQuery = new SP.CamlQuery();
+
+            if (invID == "") {
+                alert("No selected invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><Query><Where><Eq><FieldRef Name='Invoice_x0020_Number'></FieldRef><Value Type='Text'>" + invID + "</Value></Eq></Where></Query></View>");
+            }
+            collListItem = oList.getItems(camlQuery);
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+                debugger;
+                var listItemEnum = collListItem.getEnumerator();
+                var i = listItemEnum.$2F_0;
+
+                while (listItemEnum.moveNext()) {
+
+                    var spItem = listItemEnum.get_current();
+
+                    var actSeqID = spItem.get_item('ActionSeqID');
+                    var tempPWFID = spItem.get_item('NewColumn10');
+                    var parentWFID = (tempPWFID == null || tempPWFID == '') ? "" : tempPWFID;
+
+                    if (actSeqID == '1' && (parentWFID == '' || parentWFID.length == 0)) {
+
+                        spItem.set_item('ActionStatus', ActionStatus.INPROGRESS);
+
+                    }
+                    else {
+                        spItem.set_item('ActionStatus', ActionStatus.NOTSTARTED);
+                        spItem.set_item('Start_x0020_Date', null);
+                    }
+
+                    spItem.update();
+                    i--;
+
+                }
+
+                clientContext.executeQueryAsync(function () {
+                    //  alert(i);
+                    if (i > 0) {
+                        RollBackActions(invID);
+                    } else {
+                        onSuccessRollBack();
+                    }
+                    spinner.stop();
+
+                }, onFailed);
+
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+
+    }
+    function GetFirstOwnerAndStartDate(invID) {
+        debugger;
+        var dfd = $.Deferred(function () {
+
+
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('ActionHistory');
+
+            var camlQuery = new SP.CamlQuery();
+            if (invID == "") {
+                alert("No invoice!");
+            }
+            else {
+                camlQuery.set_viewXml("<View><Query><Where><Eq><FieldRef Name='Invoice_x0020_Number'></FieldRef> <Value Type='Text'>" + invID + "</Value></Eq></Where></Query></View>");
+            }
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+                var listItemEnumerator = collListItem.getEnumerator();
+                if (listItemEnumerator.moveNext()) {
+                    debugger;
+                    var oListItem = listItemEnumerator.get_current();
+                    var parentWFID = oListItem.get_item("NewColumn10");
+                    var tasktype = oListItem.get_item("tasktype");
+                    //alert('parentwfid ' + parentWFID);
+                    if ((parentWFID == null || parentWFID == '') && tasktype == Task_Type.APPROVAL) {
+                        var firststep_Owner_obj = oListItem.get_item("Operator");
+                        firststep_Owner = firststep_Owner_obj.get_lookupId();
+                        // alert('get done ' + firststep_Owner);
+                        var tempfirststep_StartDate = oListItem.get_item("Start_x0020_Date");
+                        var temptoday = getToday();
+                        firststep_StartDate = (tempfirststep_StartDate == null || tempfirststep_StartDate == '') ? temptoday : tempfirststep_StartDate;
+                        // alert('get done ' + firststep_StartDate);
+                    }
+
+
+
+
+
+                }
+                else {
+                    alert("GetFirstOwnerAndStartDate: Invoice no find!");
+                }
+                clientContext.executeQueryAsync(onSuccessClean, onFailed);
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+
+    }
+
+
+
+    //Delete Success
+    function onSuccessClean(sender, args) {
+
+        //alert("All items deleted!");
+
+        //  window.location = window.location.href;
+
+    }
+    //Delete Success
+    function onSuccessRollBack(sender, args) {
+
+        //alert("Successfully Roll Back. Please enjoy the new workflow ^_^");
+
+        window.location = window.location.href;
+
+    }
+
+    var LoginUserVM = {
+        ID: ko.observable(),
+        Name: ko.observable()
+    }
+
+    function initCurUser() {
+        debugger;
+        var context = new SP.ClientContext.get_current();
+        var web = context.get_web();
+        var currentUser = web.get_currentUser();
+        currentUser.retrieve();
+
+        context.load(web);
+        context.executeQueryAsync(
+           function () { //On success function
+               debugger;
+               var userObject = web.get_currentUser();
+               //var currentUser_email = userObject.get_email();
+               var currentUser_id = userObject.get_id();
+               var currentUser_fullname = userObject.get_title();
+               var currentUser_name = currentUser_fullname.substring(0, currentUser_fullname.lastIndexOf(' '));
+               //alert(currentUser_id);
+               LoginUserVM.ID(currentUser_id);
+               LoginUserVM.Name(currentUser_name);
+           },
+          function () { //On fail function
+              alert('Error: ' + args.get_message() + '\n' + args.get_stackTrace());
+          }
+       );
+    }
+
+
+    function RollBackActivityStream(invID) {
+        debugger;
+
+        var dfd = $.Deferred(function () {
+            debugger;
+
+
+            var clientContext = new SP.ClientContext.get_current();
+            var oList = clientContext.get_web().get_lists().getByTitle('ActivityStream');
+
+            var camlQuery = new SP.CamlQuery();
+
+            camlQuery.set_viewXml("<View><Query><Where><And><Eq><FieldRef Name='InvoiceNo'></FieldRef><Value Type='Text'>" + invID + "</Value></Eq><IsNotNull><FieldRef Name='ActionID'></FieldRef></IsNotNull></And></Where></Query></View>");
+
+            collListItem = oList.getItems(camlQuery);
+            //alert("111111");
+            clientContext.load(collListItem);
+            clientContext.executeQueryAsync(function () {
+
+                var listItemEnum = collListItem.getEnumerator();
+
+                var counter = 0;
+
+                var itemArr = new Array();
+
+                while (listItemEnum.moveNext()) {
+
+                    var listItem = listItemEnum.get_current();
+
+                    itemArr[counter] = listItem.get_item("ID");
+
+                    counter++;
+
+                }
+                for (var id in itemArr) {
+
+                    var spItem = oList.getItemById(itemArr[id]);
+
+                    spItem.deleteObject();
+
+                }
+                debugger;
+                clientContext.executeQueryAsync(onSuccessClean, onFailed);
+                dfd.resolve();
+
+            }, function (sender, args) {
+                dfd.reject(args.get_message());
+            });
+
+        });
+        return dfd.promise();
+
+
+    }
+
+
+
+</script>
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+    <!--[if gte mso 9]><xml>
+        <mso:CustomDocumentProperties>
+        <mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Editor msdt:dt="string">China SDC</mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Editor>
+        <mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Author msdt:dt="string">China SDC</mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Author>
+        <mso:SharedWithUsers msdt:dt="string"></mso:SharedWithUsers>
+    </mso:CustomDocumentProperties>
+        </xml><![endif]-->
+</head>
+</html>

@@ -40,8 +40,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.SharePoint.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SharePoint.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -85,6 +89,14 @@
     <Content Include="Content\Office.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\Close.png" />
+    <Content Include="Pages\PaymentPlan.aspx" />
+    <Content Include="Content\PTP.css" />
+    <Content Include="Pages\Reference\InvoiceView1.html" />
+    <Content Include="Pages\Reference\path.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\ptp.js" />
     <Content Include="Scripts\_officeintellisense.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Properties\AssemblyInfo.cs" />
@@ -93,7 +105,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -108,15 +122,27 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SPDataController.cs" />
     <Compile Include="Controllers\SPDataUpdateController.cs" />
+    <Compile Include="Helpers\ListHelper.cs" />
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
+    <Compile Include="Models\Step.cs" />
+    <Compile Include="Pages\PaymentPlan.aspx.cs">
+      <DependentUpon>PaymentPlan.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PaymentPlan.aspx.designer.cs">
+      <DependentUpon>PaymentPlan.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

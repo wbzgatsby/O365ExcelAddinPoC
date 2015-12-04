@@ -23,7 +23,7 @@ namespace SPSyncWeb.Controllers
             {
                 context.Credentials = new SharePointOnlineCredentials(Constants.userName, password);
 
-                var list = context.Web.Lists.GetByTitle(Constants.listName);
+                var list = context.Web.Lists.GetByTitle(Constants.listInvoiceDetail);
                 context.Load(list);
                 context.ExecuteQuery();
 

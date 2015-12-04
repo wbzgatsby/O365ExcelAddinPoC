@@ -31,7 +31,7 @@ namespace SPSyncWeb.Helpers
             return string.Empty;
         }
 
-        public static string GetUserFieldValue(ClientContext ctx, object o)
+        public static string GetUserFieldEmail(object o)
         {
             var owner = (FieldUserValue)o;
             if (null != owner && !string.IsNullOrEmpty(owner.LookupValue) && !string.IsNullOrEmpty(owner.Email))
@@ -41,6 +41,17 @@ namespace SPSyncWeb.Helpers
             }
 
             return string.Empty;
+        }
+
+        public static FieldUserValue GetUserFieldValue(object o)
+        {
+            var owner = (FieldUserValue)o;
+            if (null != owner)
+            {
+                return owner;
+            }
+
+            return null;
         }
 
         public static User EnsureUser(ClientContext ctx, string loginName)
@@ -87,5 +98,15 @@ namespace SPSyncWeb.Helpers
 
             return null;
         }
+
+        public static int ConvertInt(string value)
+        { 
+            int temp = 0;
+            Int32.TryParse(value, out temp);
+
+            return temp;
+        }
+
+        
     }
 }
