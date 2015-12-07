@@ -1,7 +1,9 @@
 ﻿using Microsoft.SharePoint.Client;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security;
 using System.Web;
 
@@ -107,6 +109,42 @@ namespace SPSyncWeb.Helpers
             return temp;
         }
 
-        
+        public static string ConsumeWebAPI(string url, string requestType, byte[] parameter)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = requestType;
+            request.ContentType = "application/xml";
+            if (null != parameter)
+            {
+                request.ContentLength = parameter.Length;
+                using (Stream post = request.GetRequestStream())
+                {
+                    post.Write(parameter, 0, parameter.Length);
+                }
+            }
+
+            //get response
+            string response = string.Empty;
+            try
+            {
+                WebResponse webResponse = request.GetResponse();
+                using (Stream webStream = webResponse.GetResponseStream())
+                {
+                    if (webStream != null)
+                    {
+                        using (StreamReader responseReader = new StreamReader(webStream))
+                        {
+                            response = responseReader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //To do log the exception
+            }
+
+            return response;
+        }
     }
 }

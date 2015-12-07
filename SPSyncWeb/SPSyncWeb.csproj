@@ -93,6 +93,10 @@
     <Content Include="Content\PTP.css" />
     <Content Include="Pages\Reference\InvoiceView1.html" />
     <Content Include="Pages\Reference\path.js" />
+    <None Include="Properties\PublishProfiles\PwCAzureSPSync - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\PwCAzureSPSync - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TestPPWeb - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\TestPPWeb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
