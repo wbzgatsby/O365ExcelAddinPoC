@@ -13,5 +13,27 @@
                 $(this).parents(".paymentplan_input_wrapper").addClass("open");
             }
         });
+
+        $("input.confirm").click(function () {
+            var sum = 0;
+            $(".inputbox input.payamount").each(function (index) {
+                if ($(this).val()) {
+                    sum += parseInt($(this).val());
+                }
+            });
+            if (sum != 100) {
+                alert("Total should be 100%.");
+            }
+        });
+
+        $(".inputbox input.paydate").datepicker({
+            minDate: 0,
+            onSelect: function (dateText, instance) {
+                console.log($(this).parents(".paymentplan_input_wrapper").children(".payment_date"));
+                $(this).parents(".paymentplan_input_wrapper").children(".paymentplan_input_title").children(".payment_date").html(dateText);
+            },
+            dateFormat: "mm/dd/yy",
+            constrainInput: true
+        });
     });
 })();
