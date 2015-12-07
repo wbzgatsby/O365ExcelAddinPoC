@@ -23,6 +23,7 @@
             });
             if (sum != 100) {
                 alert("Total should be 100%.");
+                return false;
             }
         });
 
