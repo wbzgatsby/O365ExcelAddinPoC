@@ -261,7 +261,8 @@ namespace SPSyncWeb.Pages
 
 
             //Update info in Invoice Detail list
-            int owner = 0;
+            Step nextStep = null;
+            //int owner = 0;
             if (null != Steps && Steps.Count > 0)
             {
                 int actSeqId = GetCurrentActSeqID();
@@ -272,22 +273,28 @@ namespace SPSyncWeb.Pages
                     int preSeqID = step.PreSeqID.GetValueOrDefault();
                     if (preSeqID == actSeqId && workflowId != step.WorkflowID)
                     {
-                        var stepOwner = step.Operator;
-                        if (null != stepOwner)
-                        {
-                            owner = stepOwner.LookupId;
+                        nextStep = step;
+                        break;
+                        //var stepOwner = step.Operator;
+                        //if (null != stepOwner)
+                        //{
+                        //    owner = stepOwner.LookupId;
 
-                            break;
-                        }
+                        //    break;
+                        //}
                     }
                 }
             }
 
             Hashtable htInvoice = new Hashtable();
             htInvoice.Add("CurrentStep", Constants.TaskType_APPROVAL);
-            if (owner > 0)
+            //if (owner > 0)
+            //{
+            //    htInvoice.Add("Owner", owner);
+            //}
+            if (null != nextStep.Operator && nextStep.Operator.LookupId > 0)
             {
-                htInvoice.Add("Owner", owner);
+                htInvoice.Add("Owner", nextStep.Operator.LookupId);
             }
             htInvoice.Add("WFStatus", Constants.WFStatus_INPROGRESS);
             htInvoice.Add("LastStepDate", DateTime.Today);
@@ -299,15 +306,24 @@ namespace SPSyncWeb.Pages
 
             //Add New task
             Hashtable htNewTask = new Hashtable();
-            htNewTask.Add("AssignedTo", owner);
+            //htNewTask.Add("AssignedTo", owner);
+            if (null != nextStep.Operator && nextStep.Operator.LookupId > 0)
+            {
+                htNewTask.Add("AssignedTo", nextStep.Operator.LookupId);
+            }
             htNewTask.Add("Title", Constants.TaskType_APPROVAL);
             htNewTask.Add("tasktype", Constants.TaskType_APPROVAL);
             htNewTask.Add("DueDate", DateTime.Today.AddDays(3));
             //htNewTask.Add("Comments", "");
             htNewTask.Add("InvoiceNo", InvoiceNumber);
-            htNewTask.Add("actID", ActionID);
+            htNewTask.Add("actID", nextStep.ID);
 
             ListHelper.AddListItem(htNewTask, Constants.listTask);
+
+            //Send notification
+            string notificationAPIURL = "https://microsoft-apiapp8279cab770f148628b34e9c1880e2321.azurewebsites.net:443/Notifications/Send/apns/You have a new task - " + Constants.TaskType_APPROVAL + "/" + nextStep.DeviceId;
+            string response = Utilities.ConsumeWebAPI(notificationAPIURL, "GET", null);
+            Page.ClientScript.RegisterClientScriptBlock(GetType(), "PaymentPlan", "console.log(" + response + ");", true);
         }
 
         private void AddActivity()

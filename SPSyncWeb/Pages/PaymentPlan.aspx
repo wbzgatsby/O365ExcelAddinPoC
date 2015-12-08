@@ -5,9 +5,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <link rel="stylesheet" href="../Content/jquery-ui-1.11.4.css" />
     <link rel="stylesheet" href="../Content/PTP.css" />
 
     <script type="text/javascript" src="../Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-ui-1.11.4.js"></script>
     <script type="text/javascript" src="../Scripts/ptp.js"></script>
 </head>
 <body>
@@ -84,7 +86,7 @@
                 <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button">
                     <span class="ui-button-text">Cancel</span>
                 </button>--%>
-                <asp:Button ID="bt_Confirm" runat="server" CssClass="ptp-button" Text="Confirm" OnClick="bt_Confirm_Click" />
+                <asp:Button ID="bt_Confirm" runat="server" CssClass="ptp-button confirm" Text="Confirm" OnClick="bt_Confirm_Click" />
                 <asp:Button ID="bt_Cancel" runat="server" CssClass="ptp-button" Text="Cancel" />
             </div>
         </div>

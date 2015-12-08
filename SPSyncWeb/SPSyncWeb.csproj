@@ -98,6 +98,10 @@
     <Content Include="App\Home\Home.css" />
     <Content Include="App\Home\Home.html" />
     <Content Include="App\Home\Home.js" />
+    <Content Include="Content\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\jquery-ui-1.11.4.css" />
+    <Content Include="Content\jquery-ui-1.11.4.min.css" />
     <Content Include="Content\Office.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\Close.png" />
@@ -105,9 +109,15 @@
     <Content Include="Content\PTP.css" />
     <Content Include="Pages\Reference\InvoiceView1.html" />
     <Content Include="Pages\Reference\path.js" />
+    <None Include="Properties\PublishProfiles\PwCAzureSPSync - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\PwCAzureSPSync - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TestPPWeb - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\TestPPWeb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
     <Content Include="Scripts\ptp.js" />
     <Content Include="Scripts\_officeintellisense.js" />
     <Content Include="Scripts\_references.js" />
