@@ -62,7 +62,7 @@ namespace SPSyncWeb.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            GetInvoiceDetail();
+            //GetInvoiceDetail();
             if (!IsPostBack)
             {
                 //var item = ListHelper.GetInvoiceByNum(InvoiceNumber);
@@ -330,7 +330,8 @@ namespace SPSyncWeb.Pages
 
 
             //Send Email
-
+            SendGridHelper help = new SendGridHelper();
+            help.SendEmailWebApi("Hello I'm testing SendGrid", "jiangping.lu@pwc.com", "ljp123", "ljp888");
         }
 
         private int GetCurrentActSeqID()
