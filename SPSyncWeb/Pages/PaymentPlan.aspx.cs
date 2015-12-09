@@ -303,7 +303,7 @@ namespace SPSyncWeb.Pages
             ListHelper.UpdateListItem(htInvoice, Constants.listInvoiceDetail, InvoiceID);
 
 
-            //123
+
 
             //Add New task
             Hashtable htNewTask = new Hashtable();
