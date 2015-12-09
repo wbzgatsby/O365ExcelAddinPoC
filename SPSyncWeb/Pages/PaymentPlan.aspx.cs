@@ -12,22 +12,18 @@ namespace SPSyncWeb.Pages
 {
     public partial class PaymentPlan : System.Web.UI.Page
     {
-        string InvoiceNumber = "FC2046";
-        //private string InvoiceNumber
-        //{
-        //    get
-        //    {
-        //        if (!string.IsNullOrEmpty(Request.QueryString["IN"]))
-        //        {
-        //            return Request.QueryString["IN"];
-        //        }
+        private string InvoiceNumber
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Request.QueryString["IN"]))
+                {
+                    return Request.QueryString["IN"];
+                }
 
-        //        return string.Empty;
-        //    }
-        //    set {
-        //        this._invoice = value;
-        //    }
-        //}
+                return string.Empty;
+            }
+        }
 
         protected int ActionID
         {
@@ -351,7 +347,7 @@ namespace SPSyncWeb.Pages
 
             //Send Email
             SendGridHelper help = new SendGridHelper();
-            help.SendEmailWebApi("Need your approval for the payment plan", "alfred.wilson@businessos.onmicrosoft.com");
+            help.SendEmailWebApi("jiangping.lu@pwc.com");//alfred.wilson@businessos.onmicrosoft.com
         }
 
         private int GetCurrentActSeqID()
