@@ -349,7 +349,7 @@ namespace SPSyncWeb.Pages
             //Send Email
             SendGridHelper help = new SendGridHelper();
             //help.SendEmailWebApi("Need your approval for the payment plan", "alfred.wilson@businessos.onmicrosoft.com");
-            help.SendEmailWebApi("Need your approval for the payment plan", nextStep.Operator.Email);
+            help.SendEmailWebApi(nextStep.Operator.Email);
         }
 
         private int GetCurrentActSeqID()
