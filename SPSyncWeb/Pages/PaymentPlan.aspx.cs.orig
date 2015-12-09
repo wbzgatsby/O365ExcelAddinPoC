@@ -348,8 +348,12 @@ namespace SPSyncWeb.Pages
             Step nextStep = GetNextStep(true);
             //Send Email
             SendGridHelper help = new SendGridHelper();
+<<<<<<< HEAD
+            help.SendEmailWebApi("jiangping.lu@pwc.com");//alfred.wilson@businessos.onmicrosoft.com
+=======
             //help.SendEmailWebApi("Need your approval for the payment plan", "alfred.wilson@businessos.onmicrosoft.com");
             help.SendEmailWebApi("Need your approval for the payment plan", nextStep.Operator.Email);
+>>>>>>> 6409b3f617bf7303cd7a4c6640b3500b4c676845
         }
 
         private int GetCurrentActSeqID()
