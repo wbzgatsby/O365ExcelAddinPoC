@@ -12,18 +12,22 @@ namespace SPSyncWeb.Pages
 {
     public partial class PaymentPlan : System.Web.UI.Page
     {
-        protected string InvoiceNumber
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(Request.QueryString["IN"]))
-                {
-                    return Request.QueryString["IN"];
-                }
+        string InvoiceNumber = "FC2046";
+        //private string InvoiceNumber
+        //{
+        //    get
+        //    {
+        //        if (!string.IsNullOrEmpty(Request.QueryString["IN"]))
+        //        {
+        //            return Request.QueryString["IN"];
+        //        }
 
-                return string.Empty;
-            }
-        }
+        //        return string.Empty;
+        //    }
+        //    set {
+        //        this._invoice = value;
+        //    }
+        //}
 
         protected int ActionID
         {
@@ -62,7 +66,7 @@ namespace SPSyncWeb.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //GetInvoiceDetail();
+            GetInvoiceDetail();
             if (!IsPostBack)
             {
                 //var item = ListHelper.GetInvoiceByNum(InvoiceNumber);
@@ -347,7 +351,7 @@ namespace SPSyncWeb.Pages
 
             //Send Email
             SendGridHelper help = new SendGridHelper();
-            help.SendEmailWebApi("Hello I'm testing SendGrid", "jiangping.lu@pwc.com", "ljp123", "ljp888");
+            help.SendEmailWebApi("Need your approval for the payment plan", "alfred.wilson@businessos.onmicrosoft.com");
         }
 
         private int GetCurrentActSeqID()

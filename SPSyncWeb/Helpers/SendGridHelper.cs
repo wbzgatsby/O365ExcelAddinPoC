@@ -19,7 +19,7 @@ namespace SPSyncWeb.Helpers
         /// <param name="ToEmail"></param>
         /// <param name="currentStepOwner"></param>
         /// <param name="nextStepOwner"></param>
-        public void SendEmailWebApi(string subject, string ToEmail, string currentStepOwner, string nextStepOwner)
+        public void SendEmailWebApi(string subject, string ToEmail)
         {
             //Get parameters from web.config
             AppSettingsReader appReader = new AppSettingsReader();
@@ -32,11 +32,7 @@ namespace SPSyncWeb.Helpers
 
             //create json header for sending with template
             StringBuilder sb = new StringBuilder();
-            sb.Append("{\"sub\": {\":next\":[\"");
-            sb.Append(nextStepOwner);
-            sb.Append("\"],\"current\":[\"");
-            sb.Append(currentStepOwner);
-            sb.Append("\"]},\"category\": \"Promotions\", \"filters\": {\"templates\": {\"settings\": {\"enable\": 1,\"template_id\": \"");
+            sb.Append("{\"category\": \"Promotions\", \"filters\": {\"templates\": {\"settings\": {\"enable\": 1,\"template_id\": \"");
             sb.Append(templateId);
             sb.Append("\"}}}}");
 
@@ -49,7 +45,7 @@ namespace SPSyncWeb.Helpers
             request.AddParameter("subject", subject);
             request.AddParameter("from", EmailFrom);
             request.AddParameter("x-smtpapi", sb.ToString());
-            request.AddParameter("text", "test"); //The plain text content of your email message.
+            request.AddParameter("html", "<!DOCTYPE HTML><html><head></header><body><img src=\"https://marketing-image-production.s3.amazonaws.com/uploads/609daab121cfbea8768eaeca2c6d6033378fc1ad3e32ee8bc5ad5fe3832fe4f9d55c6c54f1deb4b0a9ac700798e6beba5e873a161f7cb9a5e0e727a72e8544e1.jpg\"></img></body></html>"); //The plain text content of your email message.
 
             // execute the request
             var response = client.Execute(request);
