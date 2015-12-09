@@ -12,22 +12,18 @@ namespace SPSyncWeb.Pages
 {
     public partial class PaymentPlan : System.Web.UI.Page
     {
-        string InvoiceNumber = "FC2046";
-        //private string InvoiceNumber
-        //{
-        //    get
-        //    {
-        //        if (!string.IsNullOrEmpty(Request.QueryString["IN"]))
-        //        {
-        //            return Request.QueryString["IN"];
-        //        }
+        private string InvoiceNumber
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Request.QueryString["IN"]))
+                {
+                    return Request.QueryString["IN"];
+                }
 
-        //        return string.Empty;
-        //    }
-        //    set {
-        //        this._invoice = value;
-        //    }
-        //}
+                return string.Empty;
+            }
+        }
 
         protected int ActionID
         {
@@ -265,30 +261,31 @@ namespace SPSyncWeb.Pages
 
 
             //Update info in Invoice Detail list
-            Step nextStep = null;
-            //int owner = 0;
-            if (null != Steps && Steps.Count > 0)
-            {
-                int actSeqId = GetCurrentActSeqID();
-                int workflowId = GetCurrentWFID();
+            //Step nextStep = null;
+            ////int owner = 0;
+            //if (null != Steps && Steps.Count > 0)
+            //{
+            //    int actSeqId = GetCurrentActSeqID();
+            //    int workflowId = GetCurrentWFID();
 
-                foreach (var step in Steps)
-                {
-                    int preSeqID = step.PreSeqID.GetValueOrDefault();
-                    if (preSeqID == actSeqId && workflowId != step.WorkflowID)
-                    {
-                        nextStep = step;
-                        break;
-                        //var stepOwner = step.Operator;
-                        //if (null != stepOwner)
-                        //{
-                        //    owner = stepOwner.LookupId;
+            //    foreach (var step in Steps)
+            //    {
+            //        int preSeqID = step.PreSeqID.GetValueOrDefault();
+            //        if (preSeqID == actSeqId && workflowId != step.WorkflowID)
+            //        {
+            //            nextStep = step;
+            //            break;
+            //            //var stepOwner = step.Operator;
+            //            //if (null != stepOwner)
+            //            //{
+            //            //    owner = stepOwner.LookupId;
 
-                        //    break;
-                        //}
-                    }
-                }
-            }
+            //            //    break;
+            //            //}
+            //        }
+            //    }
+            //}
+            Step nextStep = GetNextStep(true);
 
             Hashtable htInvoice = new Hashtable();
             htInvoice.Add("CurrentStep", Constants.TaskType_APPROVAL);
@@ -348,10 +345,11 @@ namespace SPSyncWeb.Pages
 
             ListHelper.AddListItem(ht, Constants.listActivityStream);
 
-
+            Step nextStep = GetNextStep(true);
             //Send Email
             SendGridHelper help = new SendGridHelper();
-            help.SendEmailWebApi("Need your approval for the payment plan", "alfred.wilson@businessos.onmicrosoft.com");
+            //help.SendEmailWebApi("Need your approval for the payment plan", "alfred.wilson@businessos.onmicrosoft.com");
+            help.SendEmailWebApi("Need your approval for the payment plan", nextStep.Operator.Email);
         }
 
         private int GetCurrentActSeqID()
@@ -384,6 +382,28 @@ namespace SPSyncWeb.Pages
             }
 
             return 0;
+        }
+
+        private Step GetNextStep(bool isSubStep)
+        {
+            Step nextStep = null;
+            if (null != Steps && Steps.Count > 0)
+            {
+                int actSeqId = GetCurrentActSeqID();
+                int workflowId = GetCurrentWFID();
+
+                foreach (var step in Steps)
+                {
+                    int preSeqID = step.PreSeqID.GetValueOrDefault();
+                    if (preSeqID == actSeqId && ((workflowId != step.WorkflowID && isSubStep) || (workflowId == step.WorkflowID && !isSubStep)))
+                    {
+                        nextStep = step;
+                        break;
+                    }
+                }
+            }
+
+            return nextStep;
         }
     }
 }
